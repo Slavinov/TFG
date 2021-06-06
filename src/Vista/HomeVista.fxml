@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="Controlador.HomeControlador">
+    <stylesheets>
+        <URL value="@homevista.css" />
+    </stylesheets>
+   <children>
+      <Button fx:id="crearWorkspace" layoutX="247.0" layoutY="188.0" mnemonicParsing="false" onAction="#crearWorkspace" text="Crear Workspace" />
+      <Button fx:id="test" layoutX="274.0" layoutY="129.0" mnemonicParsing="false" onAction="#testAction" text="Test" />
+      <TextField fx:id="nombre" layoutX="219.0" layoutY="82.0" />
+   </children>
+</AnchorPane>
