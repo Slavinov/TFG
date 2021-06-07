@@ -16,13 +16,15 @@ public class Workspace {
         path = System.getProperty("user.home")+"\\Workspaces"; // path por defecto
         new File(path).mkdirs(); //Crea el directorio si no lo hay
         new File(path+"\\"+nombre).mkdirs(); //Crea el directorio si no lo hay
+        path = path+"\\"+nombre;
     }
     
     public Workspace(String n, String p){
         nombre = n;
         path = p; 
         new File(path).mkdirs(); //Crea el directorio si no lo hay
-        new File(path+"\\"+nombre).mkdirs(); //Crea el directorio si no lo hay
+        //new File(path+"\\"+nombre).mkdirs(); //Crea el directorio si no lo hay
+        //path = path+"\\"+nombre;
     }
 
     public String getNombre() {

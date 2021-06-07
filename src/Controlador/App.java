@@ -30,10 +30,10 @@ public class App extends Application{
     
     public static void main(String[] args) {
         /////////BANCO DE PRUEBAS////////////
-            FachadaDAO f = FachadaDAO.getFachada();
-            f.initTest();
-            f.insertTest(2322, "heheee");
-            f.getNumTest();
+            //FachadaDAO f = FachadaDAO.getFachada();
+            //f.initTest();
+            //f.insertTest(2322, "heheee");
+            //f.getNumTest();
         /////////FIN BANCO DE PRUEBAS//////////
         
         

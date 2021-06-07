@@ -7,7 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.HomeControlador">
+<AnchorPane id="AnchorPane" prefHeight="551.0" prefWidth="636.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.HomeControlador">
     <stylesheets>
         <URL value="@homevista.css" />
     </stylesheets>
@@ -17,8 +17,11 @@
       <TextField fx:id="nombre" layoutX="219.0" layoutY="82.0" />
       <Label layoutX="157.0" layoutY="86.0" text="Nombre" />
       <Label layoutX="261.0" layoutY="174.0" text="Workspaces:" />
-      <TreeView fx:id="wsTree" layoutX="200.0" layoutY="191.0" prefHeight="200.0" prefWidth="200.0" />
+      <TreeView fx:id="wsTree" layoutX="8.0" layoutY="191.0" prefHeight="200.0" prefWidth="200.0" />
       <Button layoutX="29.0" layoutY="22.0" mnemonicParsing="false" onAction="#establecerPathPorDefecto" text="Path para Worskpaces" />
       <Button layoutX="52.0" layoutY="57.0" mnemonicParsing="false" onAction="#resetearPath" text="Resetear Path" />
+      <Button layoutX="82.0" layoutY="400.0" mnemonicParsing="false" onAction="#abrirWorkspace" text="Abrir" />
+      <Button layoutX="78.0" layoutY="437.0" mnemonicParsing="false" onAction="#cerrarWorkspace" text="Cerrar" />
+      <Button layoutX="78.0" layoutY="475.0" mnemonicParsing="false" onAction="#borrarWorkspace" text="Borrar?" />
    </children>
 </AnchorPane>

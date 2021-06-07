@@ -10,7 +10,11 @@ import java.util.ArrayList;
 public class WorkspaceVO {
     private String nombre;
     private String path;
-    private ArrayList<Imagen> imagenes;
+    //private ArrayList<Imagen> imagenes;
+    
+    public WorkspaceVO(){
+        
+    }
     
     public WorkspaceVO(String n, String p){
         nombre = n;
@@ -32,16 +36,7 @@ public class WorkspaceVO {
     public void setPath(String path) {
         this.path = path;
     }
-
-    public ArrayList<Imagen> getImagenes() {
-        return imagenes;
-    }
-
-    public void setImagenes(ArrayList<Imagen> imagenes) {
-        this.imagenes = imagenes;
-    }
-    
-    
+      
     
     
 }

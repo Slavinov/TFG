@@ -1,6 +1,8 @@
 package Modelo;
 
 import DataAccess.FachadaDAO;
+import ValueObjects.ConfigVO;
+import ValueObjects.WorkspaceVO;
 import java.util.ArrayList;
 
 /**
@@ -44,10 +46,16 @@ public class FachadaModelo {
     /////////////////////MÉTODOS DEL MODELO/////////////////////////
     //Métodos generales
     public void init(){
-        //Creación de la fachada BD, inicialización de DAOs
-        
-        //Extraer config y Workspaces, meter los workspaces en el arraylist y establecer los atributos de config. En caso de fallo? reintentar? -> AÑADIR UN ACTIVITY INDICATOR O ALGO
-        
+        //inicialización de DAOs
+        baseDatos.initConfig();
+        ConfigVO config = baseDatos.getConfig();
+        this.path = config.getDefaultPath();
+        baseDatos.initWorkspace();
+        //Extraer config y Workspaces, meter los workspaces en el arraylist y establecer los atributos de config. En caso de fallo? dejar en blanco todo -> AÑADIR UN ACTIVITY INDICATOR O ALGO
+        ArrayList<WorkspaceVO> wk = baseDatos.recuperarWorkspaces();
+        for(int i=0; i<wk.size();i++){
+            this.workspaces.add(new Workspace(wk.get(i).getNombre(),wk.get(i).getPath()));
+        }
         //Detección de cambios en el directorio (watching directory for changes) en todos los workspaces (meter un listener?).
     }
     
@@ -57,15 +65,29 @@ public class FachadaModelo {
         //Guardar los Workspaces en la base de datos
         
         //Cerrar la conexion a la base de datos
+        baseDatos.close();
     }
     
     //Métodos de gestión de Workspaces
-    public void crearWorkspace(){
+    public Workspace crearWorkspace(String nombre){
+        Workspace resultado = null;
         //Crear el workspace utilizando el constructor de ese
-        
+        WorkspaceVO work = new WorkspaceVO();
+        if(this.path == null){
+            resultado = new Workspace (nombre);
+            this.workspaces.add(resultado);
+            work.setNombre(nombre);
+            work.setPath(resultado.getPath());
+        }else{
+            resultado = new Workspace(nombre,path);
+            this.workspaces.add(resultado);
+            work.setNombre(nombre);
+            work.setPath(this.path);
+        }
         //Guardar su referencia en la BD
-        
+        this.baseDatos.insertarWorkspace(work);
         //En caso de añadir imágenes, tratarlas aquí (extraer info, descriptores...)
+        return resultado;
     }
     
     public void borrarWorkspace(){
@@ -73,19 +95,57 @@ public class FachadaModelo {
         //Eliminar su referencia de la BD
     }
     
-    public void abrirWorkspace(){
-        //Escanear el contenido de la carpeta, tratando las imágenes encontradas
+    public Workspace abrirWorkspace(String nombre, String path){
+        //Escanear el contenido de la carpeta, tratando las imágenes encontradas, añadiendo su referencia a persistencia, añadir listener a la carpeta?
         
         //Añadir referencias a la BD
+        Workspace resultado = null;
+        
+        boolean existe = false;
+        for(int i = 0; i< workspaces.size(); i++){
+            if(workspaces.get(i).getNombre().equals(nombre)){
+                return null;
+            }
+        }
+        resultado = new Workspace(nombre, path);
+        WorkspaceVO temp = new WorkspaceVO();
+        temp.setNombre(nombre);
+        temp.setPath(path);
+        this.baseDatos.insertarWorkspace(temp);
+        
+        return resultado;
     }
     
-    public void cerrarWorkspace(){
+    public void cerrarWorkspace(String nombre){
         //Borrar el Workspace de la base de datos y eliminarlo del ArrayList
+        this.baseDatos.borrarWorkspace(nombre);
+        for(int i = 0; i< workspaces.size(); i++){
+            if(workspaces.get(i).getNombre().equals(nombre)){
+                workspaces.remove(i);
+                break;
+            }
+        }
+    }
+    
+    //Compreuba si hay un workspace con ese nombre
+    public boolean existeWorkspace(String nombre){
+        boolean existe = false;
+        
+        for(int i = 0; i< workspaces.size(); i++){
+            if(workspaces.get(i).equals(nombre)){
+                existe = true;
+            }
+        }
+        
+        return existe;
     }
     
     //Métodos de guardado de estado
     public void guardarConfig(){
         //Guardar la configuración en la BD
+        ConfigVO c = new ConfigVO();
+        c.setDefaultPath(path);
+        this.baseDatos.setConfig(c);   
     }
     
     public void guardarWorkspace(){

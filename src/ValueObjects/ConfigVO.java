@@ -8,6 +8,10 @@ package ValueObjects;
 public class ConfigVO {
     private String defaultPath;
     
+    public ConfigVO(){
+        
+    }
+    
     public ConfigVO(String p){
         defaultPath = p;
     }
