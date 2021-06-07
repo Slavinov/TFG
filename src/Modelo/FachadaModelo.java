@@ -1,5 +1,6 @@
 package Modelo;
 
+import DataAccess.FachadaDAO;
 import java.util.ArrayList;
 
 /**
@@ -8,10 +9,29 @@ import java.util.ArrayList;
  */
 public class FachadaModelo {
     private ArrayList<Workspace> workspaces;
+    private String path; //Path por defecto de los workspaces, establecido o no por el usuario
+    private FachadaDAO baseDatos;
     
     public FachadaModelo(){
         workspaces = new ArrayList<Workspace>();
+        baseDatos = FachadaDAO.getFachada();
     }
+
+    public FachadaDAO getBaseDatos() {
+        return baseDatos;
+    }
+
+    public void setBaseDatos(FachadaDAO baseDatos) {
+        this.baseDatos = baseDatos;
+    }
+    
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    } 
 
     public ArrayList<Workspace> getWorkspaces() {
         return workspaces;
@@ -61,5 +81,14 @@ public class FachadaModelo {
     
     public void cerrarWorkspace(){
         //Borrar el Workspace de la base de datos y eliminarlo del ArrayList
+    }
+    
+    //Métodos de guardado de estado
+    public void guardarConfig(){
+        //Guardar la configuración en la BD
+    }
+    
+    public void guardarWorkspace(){
+        //Guardar el workspace seleccionado en la BD
     }
 }
