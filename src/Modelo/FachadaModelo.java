@@ -3,6 +3,7 @@ package Modelo;
 import DataAccess.FachadaDAO;
 import ValueObjects.ConfigVO;
 import ValueObjects.WorkspaceVO;
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -79,7 +80,7 @@ public class FachadaModelo {
             work.setNombre(nombre);
             work.setPath(resultado.getPath());
         }else{
-            resultado = new Workspace(nombre,path);
+            resultado = new Workspace(nombre,path+"\\"+nombre);
             this.workspaces.add(resultado);
             work.setNombre(nombre);
             work.setPath(this.path);
@@ -96,7 +97,7 @@ public class FachadaModelo {
     }
     
     public Workspace abrirWorkspace(String nombre, String path){
-        //Escanear el contenido de la carpeta, tratando las imágenes encontradas, añadiendo su referencia a persistencia, añadir listener a la carpeta?
+        //Escanear el contenido de la carpeta, tratando las imágenes encontradas, añadiendo su referencia a persistencia, añadir listener a la carpeta? -> Solo a la seleccionada?
         
         //Añadir referencias a la BD
         Workspace resultado = null;
@@ -139,6 +140,11 @@ public class FachadaModelo {
         
         return existe;
     }
+    
+    //Añade una imagen a un workspace dado
+    //public void anhadirImagen(String nombre, File imagen){
+    //    
+    //}
     
     //Métodos de guardado de estado
     public void guardarConfig(){
