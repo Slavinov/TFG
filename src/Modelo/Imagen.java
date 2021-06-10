@@ -10,6 +10,8 @@ public class Imagen {
     private String nombre;
     private String formato;
     private ArrayList<Descriptor> descriptores;
+    private int[][] valores;
+    private int[][] valoresBlancos;
     private int altura;
     private int anchura;
     private int bandas;

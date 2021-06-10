@@ -23,5 +23,11 @@
       <Button layoutX="82.0" layoutY="400.0" mnemonicParsing="false" onAction="#abrirWorkspace" text="Abrir" />
       <Button layoutX="78.0" layoutY="437.0" mnemonicParsing="false" onAction="#cerrarWorkspace" text="Cerrar" />
       <Button layoutX="78.0" layoutY="475.0" mnemonicParsing="false" onAction="#borrarWorkspace" text="Borrar?" />
+      <Button fx:id="addImage" disable="true" layoutX="215.0" layoutY="218.0" mnemonicParsing="false" onAction="#anhadirImagen" text="AnhadirImagen" />
+      <ScrollPane fx:id="scrollPane" layoutX="228.0" layoutY="256.0" prefHeight="282.0" prefWidth="389.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+        </content>
+      </ScrollPane>
    </children>
 </AnchorPane>

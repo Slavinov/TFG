@@ -56,6 +56,7 @@ public class FachadaModelo {
         ArrayList<WorkspaceVO> wk = baseDatos.recuperarWorkspaces();
         for(int i=0; i<wk.size();i++){
             this.workspaces.add(new Workspace(wk.get(i).getNombre(),wk.get(i).getPath()));
+            workspaces.get(i).detectarImagenes();
         }
         //Detección de cambios en el directorio (watching directory for changes) en todos los workspaces (meter un listener?).
     }
@@ -156,5 +157,17 @@ public class FachadaModelo {
     
     public void guardarWorkspace(){
         //Guardar el workspace seleccionado en la BD
+    }
+    
+    public Workspace obtenerWorkspace(String nombre){
+        Workspace resultado = null;
+        
+        for(int i = 0; i< workspaces.size(); i++){
+            if(workspaces.get(i).equals(nombre)){
+                resultado = workspaces.get(i);
+            }
+        }
+        
+        return resultado;
     }
 }

@@ -17,11 +17,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -39,7 +43,7 @@ public class HomeControlador implements Initializable{
     private Stage stage;
     private Desktop desktop = Desktop.getDesktop(); //isDesktopSupported() para comprobar en otros sistemas. Sirve para visualizar imagenes y tal. Mejor buscar visualizador de java o implementarlo en JavaFX.
     private FachadaModelo modelo; //Singleton?
-    
+    private Workspace seleccion; //Workspace seleccionado actualmente
     
     //Atributos de elementos de JavaFX
     @FXML
@@ -52,7 +56,13 @@ public class HomeControlador implements Initializable{
         stage = s;
     }
     
+    @FXML 
+    private Button addImage;
+    
+    @FXML
+    private ScrollPane scrollPane;
     /////////////MÉTODOS////////////////
+    //Listeners
     
     
     //Init
@@ -72,6 +82,38 @@ public class HomeControlador implements Initializable{
         }
         wsTree.setRoot(rootItem);
         System.out.println("Initialize en el controlador");
+        
+        
+        //Añadir listeners:
+        wsTree.getSelectionModel().selectedItemProperty().addListener( 
+        new ChangeListener() {
+
+            @Override
+            public void changed(ObservableValue observable, Object oldValue,
+                    Object newValue) {
+
+                TreeItem<String> selectedItem = (TreeItem<String>) newValue;
+                System.out.println("Selected Text : " + selectedItem.getValue());
+                // do what ever you want
+                if(!selectedItem.getValue().equals("Workspaces")){
+                    System.out.println("Cambiando de seleccion");
+                    //Se cambia el workspace seleccionado, cargando las imágenes y todo eso
+                    seleccion = modelo.obtenerWorkspace(selectedItem.getValue());
+                    if(seleccion != null){
+                        addImage.setDisable(false);
+                    }
+                    
+                    //LÓGICA DE VISUALIZACIÓN DE IMAGENES -> Se debería añadir también un context menu o algo a cada imagen
+                    
+                    
+                    
+                }else{
+                    addImage.setDisable(true);
+                }
+            }
+
+      }
+        );
     }
     
     @FXML
@@ -124,7 +166,11 @@ public class HomeControlador implements Initializable{
                 fileChooser.setTitle("Selección de imágenes");
                 fileChooser.getExtensionFilters().addAll(
                         new FileChooser.ExtensionFilter("Todo", "*.*"),
-                        new FileChooser.ExtensionFilter("JPG", "*.jpg")
+                        new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                        new FileChooser.ExtensionFilter("PNG", "*.png"),
+                        new FileChooser.ExtensionFilter("BMP", "*.bmp"),
+                        new FileChooser.ExtensionFilter("TIF", "*.tif")
+                        
                 );
                 List<File> list = fileChooser.showOpenMultipleDialog(stage);
 
@@ -156,22 +202,6 @@ public class HomeControlador implements Initializable{
         
     } 
     
-    private void openFile(File file, Workspace ws) {
-        try {
-            //desktop.open(file); //Mostrar la imagen
-            System.out.println(file.getName());
-            File d = new File(ws.getPath()+"\\"+file.getName());
-            Path destino = d.toPath();
-            //file.renameTo(new File(workspaces.get(workspaces.size()-1).getPath()+"\\"+workspaces.get(workspaces.size()-1).getNombre()+"\\"+file.getName())); //Se mueve imagen a la carpeta destino del workspace
-            Files.copy(file.toPath(), destino , StandardCopyOption.REPLACE_EXISTING); //Se copia al destino
-        } catch (IOException ex) {
-            Logger.getLogger(
-                HomeControlador.class.getName()).log(
-                    Level.SEVERE, null, ex
-                );
-        }
-    }
-    
     @FXML
     public void abrirWorkspace(ActionEvent event){ //Meter alguna forma para reconocer que se trata de un workspace creado? Archivo de texto invisible o algo
         System.out.println("Abrir workspace");
@@ -189,6 +219,9 @@ public class HomeControlador implements Initializable{
                     alert.setContentText("El Workspace seleccionado ya está abierto o es inválido");
                     alert.showAndWait();
                 }else{
+                    //Se guarda la carpeta y se procesan las imagenes presentes
+                    abierto.setCarpeta(file);
+                    abierto.detectarImagenes();
                     wsTree.getRoot().getChildren().add(new TreeItem(abierto.getNombre()));
                 }
                 System.out.println(file.getAbsolutePath());
@@ -218,6 +251,48 @@ public class HomeControlador implements Initializable{
     @FXML 
     public void borrarWorkspace(ActionEvent event){ //Borrarlo de la base de datos y también el archivo de texto invisible que viene en la carpeta
         System.out.println("Borrar workspace");
+    }
+    
+    //Añadir imágenes a un workspace seleccionado
+    @FXML public void anhadirImagen(){
+        FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Selección de imágenes");
+                fileChooser.getExtensionFilters().addAll(
+                        new FileChooser.ExtensionFilter("Todo", "*.*"),
+                        new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                        new FileChooser.ExtensionFilter("PNG", "*.png"),
+                        new FileChooser.ExtensionFilter("BMP", "*.bmp"),
+                        new FileChooser.ExtensionFilter("TIF", "*.tif")
+                        
+                );
+                List<File> list = fileChooser.showOpenMultipleDialog(stage);
+
+                if (list != null){
+                    for (File file : list){
+                        openFile(file, seleccion);
+                    }
+                }
+    }
+    
+    
+    //Función de soporte para cargar imágenes: copia la imagen en la carpeta del workspace y llama al método de procesado de imágenes del workspace
+    private void openFile(File file, Workspace ws) {
+        try {
+            //desktop.open(file); //Mostrar la imagen
+            System.out.println(file.getName());
+            File d = new File(ws.getPath()+"\\"+file.getName());
+            Path destino = d.toPath();
+            //file.renameTo(new File(workspaces.get(workspaces.size()-1).getPath()+"\\"+workspaces.get(workspaces.size()-1).getNombre()+"\\"+file.getName())); //Se mueve imagen a la carpeta destino del workspace
+            Files.copy(file.toPath(), destino , StandardCopyOption.REPLACE_EXISTING); //Se copia al destino
+            //Se procesa en el ws
+            ws.anhadirImagen(d);
+            
+        } catch (IOException ex) {
+            Logger.getLogger(
+                HomeControlador.class.getName()).log(
+                    Level.SEVERE, null, ex
+                );
+        }
     }
     
 }
