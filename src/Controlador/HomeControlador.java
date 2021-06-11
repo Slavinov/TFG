@@ -25,10 +25,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -101,11 +105,19 @@ public class HomeControlador implements Initializable{
                     seleccion = modelo.obtenerWorkspace(selectedItem.getValue());
                     if(seleccion != null){
                         addImage.setDisable(false);
-                    }
+                    
                     
                     //LÓGICA DE VISUALIZACIÓN DE IMAGENES -> Se debería añadir también un context menu o algo a cada imagen
-                    
-                    
+                    GridPane gp = new GridPane();
+                    //Crear aquí otra caja personalizada que contenga el image view y el texto nombre de la imagen
+                    for(int i = 0; i < seleccion.getImagenes().size(); i++){//Aquí null pointer exception al sacar las miniaturas                      
+                        Pane entrada = new Pane();
+                        entrada.getChildren().add(new ImageView(seleccion.getImagenes().get(i).getMiniatura()));
+                        entrada.getChildren().add(new Label(seleccion.getImagenes().get(i).getNombre()));
+                        gp.add(entrada, i, i);
+                    }
+                    scrollPane.setContent(gp);
+                    }
                     
                 }else{
                     addImage.setDisable(true);

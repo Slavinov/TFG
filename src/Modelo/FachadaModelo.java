@@ -53,10 +53,20 @@ public class FachadaModelo {
         this.path = config.getDefaultPath();
         baseDatos.initWorkspace();
         //Extraer config y Workspaces, meter los workspaces en el arraylist y establecer los atributos de config. En caso de fallo? dejar en blanco todo -> AÑADIR UN ACTIVITY INDICATOR O ALGO
-        ArrayList<WorkspaceVO> wk = baseDatos.recuperarWorkspaces();
+        ArrayList<WorkspaceVO> wk = baseDatos.recuperarWorkspaces();     
+        
         for(int i=0; i<wk.size();i++){
-            this.workspaces.add(new Workspace(wk.get(i).getNombre(),wk.get(i).getPath()));
-            workspaces.get(i).detectarImagenes();
+            //Antes de nada obtener la referencia a la carpeta obtenida, ya que sin ella no va nada, si no se puede conseguir se salta el workspace y ya
+            File carpeta = new File(wk.get(i).getPath());
+            if(carpeta != null && carpeta.isDirectory()){
+                System.out.println("Detectado workspace: " + carpeta.getName());
+                System.out.println("Nombre del workspace?: " + wk.get(i).getNombre());
+                Workspace nuevo = new Workspace(wk.get(i).getNombre(),wk.get(i).getPath());
+                nuevo.setCarpeta(carpeta);
+                this.workspaces.add(nuevo);
+                
+                workspaces.get(i).detectarImagenes();
+            }
         }
         //Detección de cambios en el directorio (watching directory for changes) en todos los workspaces (meter un listener?).
     }
@@ -159,12 +169,14 @@ public class FachadaModelo {
         //Guardar el workspace seleccionado en la BD
     }
     
-    public Workspace obtenerWorkspace(String nombre){
+    public Workspace obtenerWorkspace(String nombre){ //NO FUNCIONA????
         Workspace resultado = null;
-        
+        System.out.println("Buscando Workspace con el nombre: " + nombre);
         for(int i = 0; i< workspaces.size(); i++){
-            if(workspaces.get(i).equals(nombre)){
+            System.out.println("Nombre del workspace actualmente buscado: " + workspaces.get(i).getNombre());
+            if(workspaces.get(i).getNombre().equals(nombre)){
                 resultado = workspaces.get(i);
+                System.out.println("Encontrado Workspace con ese nombre!");
             }
         }
         
