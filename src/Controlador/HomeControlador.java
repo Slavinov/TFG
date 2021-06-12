@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -31,6 +32,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
@@ -48,6 +50,7 @@ public class HomeControlador implements Initializable{
     private Desktop desktop = Desktop.getDesktop(); //isDesktopSupported() para comprobar en otros sistemas. Sirve para visualizar imagenes y tal. Mejor buscar visualizador de java o implementarlo en JavaFX.
     private FachadaModelo modelo; //Singleton?
     private Workspace seleccion; //Workspace seleccionado actualmente
+    private String imagenSeleccionada; //Nombre de la imagen seleccionada en el workspace
     
     //Atributos de elementos de JavaFX
     @FXML
@@ -62,6 +65,8 @@ public class HomeControlador implements Initializable{
     
     @FXML 
     private Button addImage;
+    @FXML
+    private Button extraerCor;
     
     @FXML
     private ScrollPane scrollPane;
@@ -117,6 +122,22 @@ public class HomeControlador implements Initializable{
                         gp.add(entrada, i, i);
                     }
                     scrollPane.setContent(gp);
+                    //Añadir un listener y context menu para seleccionar imagenes en el scrollpane
+                    
+                    
+                    gp.getChildren().forEach(item -> {
+                        item.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                            @Override
+                            public void handle(MouseEvent event) {
+                                System.out.println("Clickao en mi");
+                            }
+                            
+                        });
+                    });
+                    
+                    
+                    
+                    
                     }
                     
                 }else{
@@ -127,7 +148,7 @@ public class HomeControlador implements Initializable{
       }
         );
     }
-    
+   
     @FXML
     public void establecerPathPorDefecto(ActionEvent event){
         //FileChooser fileChooser = new FileChooser();
@@ -307,4 +328,9 @@ public class HomeControlador implements Initializable{
         }
     }
     
+    @FXML
+    public void extraerDescriptor(ActionEvent event){ 
+        System.out.println("Extraer descriptor de la imagen: " + imagenSeleccionada);
+        
+    }
 }

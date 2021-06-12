@@ -20,6 +20,7 @@ public class Workspace {
     private Image miniatura; //Miniatura que se muestra en la interfaz
     
     private Cargador cargador = new Cargador();
+    private Extractor extrator = new Extractor();
     
     public Workspace(String n){
         imagenes = new ArrayList<Imagen>();
@@ -124,13 +125,43 @@ public class Workspace {
         //Se itera la carpeta del workspace ignorando las subcarpetas:
         for(File fileEntry : carpeta.listFiles()){
             if(!fileEntry.isDirectory()){
-                anhadirImagen(fileEntry);  
+                anhadirImagen(fileEntry);
+                
             }
         }
     }
     
-    public void extraerDescriptor(String nombre){
+    
+    //Obtiene el descriptor de coocurrencia de la imagen dada y lo guarda en un archivo de texto en la carpeta requerida
+    //Fase 1, extraerlo sin más
+    //Fase 2, guardarlos en un archivo de texto y luego recuperarlo si existe?
+    public void extraerDescriptorCoocurrencia(String nombre){
+        //Se obtiene la imagen a través del nombre:
+        Imagen objetivo = null;
+        for(int i = 0; i<this.imagenes.size(); i++){
+            if(this.imagenes.get(i).getNombre().equals(nombre)){
+                objetivo = this.imagenes.get(i);
+            }
+        }
         
+        if(objetivo != null){
+            //Crea la carpeta de Coocurrencia si no existe:
+            new File(carpeta.getAbsolutePath()+"\\"+"Coocurrencia").mkdir();
+            //Obtiene la referencia
+            File carpetaDescriptor = new File(carpeta.getAbsolutePath()+"\\"+"Coocurrencia");
+            //Asociar internamente de alguna forma los descriptores a las imagenes
+            DescriptorCoocurrencia descriptor = this.extrator.devolverCoocurrencia(objetivo);
+            descriptor.setCarpetaDescriptor(carpetaDescriptor);
+            
+            //En primer lugar se comprueba que no exista un descriptor de ese mimso tipo, si existe se reemplaza para evitar generar descriptores infinitos:
+            for(int i = 0; i < objetivo.getDescriptores().size(); i++){
+                if(objetivo.getDescriptores().get(i) instanceof DescriptorCoocurrencia){
+                    objetivo.getDescriptores().remove(i);
+                    break;
+                }
+            }
+            objetivo.getDescriptores().add(descriptor); //Introduce el descriptor dentro del objeto imagen
+        }
     }
     
     public void compararCoocurrencia(File referencia){

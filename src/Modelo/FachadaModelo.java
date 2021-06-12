@@ -169,7 +169,7 @@ public class FachadaModelo {
         //Guardar el workspace seleccionado en la BD
     }
     
-    public Workspace obtenerWorkspace(String nombre){ //NO FUNCIONA????
+    public Workspace obtenerWorkspace(String nombre){
         Workspace resultado = null;
         System.out.println("Buscando Workspace con el nombre: " + nombre);
         for(int i = 0; i< workspaces.size(); i++){
