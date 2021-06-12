@@ -26,7 +26,7 @@ public class Extractor {
         m1.cols = i.getAnchura();
         m1.setRptr(i.getValores());
         m1.iptr = null;
-        
+        System.out.println(lib.test(m1));
         //Estructura imagen principal
         InterfazCVIPTools.IMAGE i1 = new InterfazCVIPTools.IMAGE();
         i1.image_format = JPG; //La funciónd e texture2 no comprueba el tipo de imagen así que se utiliza jpg como placeholder para todo
@@ -42,7 +42,7 @@ public class Extractor {
         m2.cols = i.getAnchura();
         m2.setRptr(i.getValoresBlancos());
         m2.iptr = null;
-        
+        System.out.println(lib.test(m2));
         //Estructura imagen máscara
         InterfazCVIPTools.IMAGE i2 = new InterfazCVIPTools.IMAGE();
         i2.image_format = JPG;

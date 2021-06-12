@@ -67,6 +67,8 @@ public class HomeControlador implements Initializable{
     private Button addImage;
     @FXML
     private Button extraerCor;
+    @FXML 
+    private Button compararBtn;
     
     @FXML
     private ScrollPane scrollPane;
@@ -110,7 +112,7 @@ public class HomeControlador implements Initializable{
                     seleccion = modelo.obtenerWorkspace(selectedItem.getValue());
                     if(seleccion != null){
                         addImage.setDisable(false);
-                    
+                        compararBtn.setDisable(false);
                     
                     //LÓGICA DE VISUALIZACIÓN DE IMAGENES -> Se debería añadir también un context menu o algo a cada imagen
                     GridPane gp = new GridPane();
@@ -118,7 +120,7 @@ public class HomeControlador implements Initializable{
                     for(int i = 0; i < seleccion.getImagenes().size(); i++){//Aquí null pointer exception al sacar las miniaturas                      
                         Pane entrada = new Pane();
                         entrada.getChildren().add(new ImageView(seleccion.getImagenes().get(i).getMiniatura()));
-                        entrada.getChildren().add(new Label(seleccion.getImagenes().get(i).getNombre()));
+                        entrada.getChildren().add(new Label(seleccion.getImagenes().get(i).getNombre()));                      
                         gp.add(entrada, i, i);
                     }
                     scrollPane.setContent(gp);
@@ -129,7 +131,19 @@ public class HomeControlador implements Initializable{
                         item.setOnMouseClicked(new EventHandler<MouseEvent>(){
                             @Override
                             public void handle(MouseEvent event) {
+                                Object source = event.getSource();
+                                if(source instanceof Pane){
+                                    Pane temp = ((Pane)source);
+                                    Label temp2 = (Label) temp.getChildren().get(1);
+                                    System.out.println(temp2.getText());
+                                    imagenSeleccionada = temp2.getText();
+                                }
                                 System.out.println("Clickao en mi");
+                                if(imagenSeleccionada != null){
+                                    extraerCor.setDisable(false);
+                                }else{
+                                    extraerCor.setDisable(true);
+                                }
                             }
                             
                         });
@@ -142,6 +156,7 @@ public class HomeControlador implements Initializable{
                     
                 }else{
                     addImage.setDisable(true);
+                    compararBtn.setDisable(true);
                 }
             }
 
@@ -331,6 +346,24 @@ public class HomeControlador implements Initializable{
     @FXML
     public void extraerDescriptor(ActionEvent event){ 
         System.out.println("Extraer descriptor de la imagen: " + imagenSeleccionada);
-        
+        seleccion.extraerDescriptorCoocurrencia(imagenSeleccionada);
+    }
+    
+    @FXML 
+    public void compararCorrelacion(ActionEvent event){
+        FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Selección de imagen de referencia");
+                fileChooser.getExtensionFilters().addAll(
+                        new FileChooser.ExtensionFilter("Todo", "*.*"),
+                        new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                        new FileChooser.ExtensionFilter("PNG", "*.png"),
+                        new FileChooser.ExtensionFilter("BMP", "*.bmp"),
+                        new FileChooser.ExtensionFilter("TIF", "*.tif")
+                        
+                );
+                File referencia = fileChooser.showOpenDialog(stage);
+                if(referencia != null){
+                    seleccion.compararCoocurrencia(referencia);
+                }
     }
 }

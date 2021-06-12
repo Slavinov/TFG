@@ -10,7 +10,7 @@ import javafx.scene.image.Image;
 public class Imagen {
     private String nombre;
     private String formato; //Irrelevante?
-    private ArrayList<Descriptor> descriptores; //Irrelevante?
+    private ArrayList<Descriptor> descriptores = new ArrayList<Descriptor>(); //Irrelevante?
     private int[][] valores;
     private int[][] valoresBlancos; //Necesario para crear la máscara
     private int altura;
@@ -20,7 +20,7 @@ public class Imagen {
     
     
     public Imagen(String n){
-        
+        nombre = n;
     }
     //Almacenar todo (formato,tipo,rows,cols,data(valores de pixeles))? probablemente. Desde Cargador -> extraer valores de pixeles, utilizando diferentes métodos dependiendo del formato quizás 
 

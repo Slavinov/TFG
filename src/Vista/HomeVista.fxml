@@ -30,5 +30,6 @@
         </content>
       </ScrollPane>
       <Button fx:id="extraerCor" disable="true" layoutX="459.0" layoutY="218.0" mnemonicParsing="false" onAction="#extraerDescriptor" text="ExtraerCor" />
+      <Button fx:id="compararBtn" disable="true" layoutX="461.0" layoutY="179.0" mnemonicParsing="false" text="Comparar" />
    </children>
 </AnchorPane>

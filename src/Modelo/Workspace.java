@@ -21,6 +21,11 @@ public class Workspace {
     
     private Cargador cargador = new Cargador();
     private Extractor extrator = new Extractor();
+    private Comparador comparador = new Comparador();
+    
+    //Atributos puramente para facilitar la representación gráfica de los mismos (resultado de la última comparativa y la imagen de referencia usada en esa misma comparación)
+    private ArrayList<Imagen> resultadoComparacion; //resultado ordenado de la última comparativa, reemplazar el array normal con este en la representación
+    private Imagen referencia; //Imagen de referencia para mostrarla en la interfaz
     
     public Workspace(String n){
         imagenes = new ArrayList<Imagen>();
@@ -86,6 +91,38 @@ public class Workspace {
 
     public void setCargador(Cargador cargador) {
         this.cargador = cargador;
+    }
+
+    public Extractor getExtrator() {
+        return extrator;
+    }
+
+    public void setExtrator(Extractor extrator) {
+        this.extrator = extrator;
+    }
+
+    public ArrayList<Imagen> getResultadoComparacion() {
+        return resultadoComparacion;
+    }
+
+    public void setResultadoComparacion(ArrayList<Imagen> resultadoComparacion) {
+        this.resultadoComparacion = resultadoComparacion;
+    }
+
+    public Comparador getComparador() {
+        return comparador;
+    }
+
+    public void setComparador(Comparador comparador) {
+        this.comparador = comparador;
+    }
+
+    public Imagen getReferencia() {
+        return referencia;
+    }
+
+    public void setReferencia(Imagen referencia) {
+        this.referencia = referencia;
     }
     
     
@@ -166,6 +203,31 @@ public class Workspace {
     
     public void compararCoocurrencia(File referencia){
         //Comprueba que existen todos los descriptores, en caso contrario los crea, luego realiza la extracción de la imagen de referencia, y al final realiza la comparación
+        boolean existe = false;
+        this.referencia = null;
+        for(int i=0; i<this.imagenes.size(); i++){
+            for(int j=0; j<this.imagenes.get(i).getDescriptores().size(); j++){
+                if(this.imagenes.get(i).getDescriptores().get(j) instanceof DescriptorCoocurrencia){
+                    existe = true;
+                }
+            }
+            if(existe == false){
+                //No existe descriptor, hay que crearlo
+                this.extraerDescriptorCoocurrencia(this.imagenes.get(i).getNombre());
+            }
+            existe = false;
+        }
+        
+        //En este punto están creados todos los descriptores bases, toca sacar el descriptor referencia
+        //DescriptorCoocurrencia ref = new DescriptorCoocurrencia();
+        //Se añade la imagen de referencia al final de la lista de imagenes para reutilizar la función de extracción normal, y se trabajará con ella desde esa posición.
+        int tamAntiguo = this.imagenes.size(); //Para comprobar que efectivamente se inserta la imagen y no realizar la comparación en caso contrario
+        this.anhadirImagen(referencia);
+        if(this.imagenes.size() == (tamAntiguo+1)){
+            this.referencia = this.imagenes.get(this.imagenes.size()-1);
+            this.resultadoComparacion = comparador.compararCoocurrencia(this.imagenes);
+        } 
+        
     }
     
     public void compararLaws(File referencia){

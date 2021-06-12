@@ -20,7 +20,7 @@ public class Cargador {
     public Imagen procesarImagen(File entrada){ //Diferenciar entre escala de gris y no escala de gris?
         Imagen resultado = null;
         resultado = new Imagen(entrada.getName());
-        
+       
         //Conversión a escala de grises
         int width;
         int height;

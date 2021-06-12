@@ -180,5 +180,6 @@ public interface InterfazCVIPTools extends Library{
         
     /////////////////////////////MÉTODOS DE EXTRACCIÖN//////////////////////////////////
     //Método de extracción de textura utilizando matrices de correlación:
+    int test(MATRIX t);
     TEXTURE2 texture2(IMAGE inputImage, IMAGE labeledImage, int band, int row, int col, int distance, int energy, int inertia, int correlation, int invDiff, int entropy, int zerorowcol);
 }   
