@@ -48,6 +48,7 @@ public class Comparador {
                 referencia[2] = ((DescriptorCoocurrencia)entrada.get(entrada.size()-1).getDescriptores().get(i)).getCorrelation()[4];
                 referencia[3] = ((DescriptorCoocurrencia)entrada.get(entrada.size()-1).getDescriptores().get(i)).getIDM()[4];
                 referencia[4] = ((DescriptorCoocurrencia)entrada.get(entrada.size()-1).getDescriptores().get(i)).getEntropy()[4];
+                System.out.println("Energía de referencia: " + referencia[0]);
             }
         }
         

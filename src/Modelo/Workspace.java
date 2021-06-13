@@ -208,6 +208,7 @@ public class Workspace {
         for(int i=0; i<this.imagenes.size(); i++){
             for(int j=0; j<this.imagenes.get(i).getDescriptores().size(); j++){
                 if(this.imagenes.get(i).getDescriptores().get(j) instanceof DescriptorCoocurrencia){
+                    System.out.println("Ya existe descriptor x!");
                     existe = true;
                 }
             }
@@ -225,8 +226,14 @@ public class Workspace {
         this.anhadirImagen(referencia);
         if(this.imagenes.size() == (tamAntiguo+1)){
             this.referencia = this.imagenes.get(this.imagenes.size()-1);
-            this.resultadoComparacion = comparador.compararCoocurrencia(this.imagenes);
+            
+            this.extraerDescriptorCoocurrencia(this.referencia.getNombre());
+            
+            this.resultadoComparacion = comparador.compararCoocurrencia(this.imagenes); //COMPARACIÓN EN SÍ
+            this.imagenes.remove(this.imagenes.size()-1); //Se elimina la imagen de referenca de las imagenes para evitar que se use para comparar a otros
         } 
+        
+        System.out.println("Imagen más similar a la referencia: " + resultadoComparacion.get(0).getNombre());
         
     }
     
