@@ -27,12 +27,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
@@ -72,6 +74,14 @@ public class HomeControlador implements Initializable{
     
     @FXML
     private ScrollPane scrollPane;
+    @FXML
+    private AnchorPane anchorPane;
+    
+    @FXML
+    private MenuBar menuSuperior;
+    
+    @FXML
+    private Pane barraHerramientas;
     /////////////MÉTODOS////////////////
     //Listeners
     
@@ -79,10 +89,20 @@ public class HomeControlador implements Initializable{
     //Init
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //AnchorPane.setTopAnchor(menuSuperior, 0.0);
+        //AnchorPane.setLeftAnchor(menuSuperior, 0.0);
+        //AnchorPane.setRightAnchor(menuSuperior, 0.0);
+        //AnchorPane.setBottomAnchor(scrollPane, 50.0);
+        //AnchorPane.setRightAnchor(scrollPane, 50.0);
+        //AnchorPane.setTopAnchor(scrollPane, 250.0);
+        //AnchorPane.setLeftAnchor(scrollPane, 220.0);
+        //AnchorPane.setLeftAnchor(barraHerramientas, 0.0);
+        //AnchorPane.setRightAnchor(barraHerramientas, 0.0);
         //Cargar datos
         modelo = new FachadaModelo();
         modelo.init();
-        
+        //menuSuperior.setPrefWidth(Double.MAX_VALUE);
+        //menuSuperior.prefWidthProperty().bind(anchorPane.prefWidthProperty());
         //Establecer el path inicial?
         
         
@@ -155,8 +175,10 @@ public class HomeControlador implements Initializable{
                     }
                     
                 }else{
-                    addImage.setDisable(true);
-                    compararBtn.setDisable(true);
+                    if(seleccion == null){
+                        addImage.setDisable(true);
+                        compararBtn.setDisable(true);
+                    }
                 }
             }
 
@@ -202,7 +224,7 @@ public class HomeControlador implements Initializable{
         Matcher matcher = pattern.matcher(nombre.getText());
         boolean valido = matcher.find();
         
-        if(valido){
+        if(valido && !(nombre.getText().equals("Workspaces"))){
             if(!modelo.existeWorkspace(nombre.getText())){
                 System.out.println("Funciono!");
                 //Creación de nuevo Workspace
@@ -238,7 +260,7 @@ public class HomeControlador implements Initializable{
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Nombre inválido");
             alert.setHeaderText(null);
-            alert.setContentText("El nombre del Workspace debe ser alfanumérico");
+            alert.setContentText("El nombre del Workspace debe contener únicamente letras y/o números");
             alert.showAndWait();
         }
     }
@@ -264,7 +286,7 @@ public class HomeControlador implements Initializable{
                     Alert alert = new Alert(AlertType.INFORMATION);
                     alert.setTitle("Apertura incorrecta");
                     alert.setHeaderText(null);
-                    alert.setContentText("El Workspace seleccionado ya está abierto o es inválido");
+                    alert.setContentText("El Workspace seleccionado ya está abierto o el nombre es inválido");
                     alert.showAndWait();
                 }else{
                     //Se guarda la carpeta y se procesan las imagenes presentes
@@ -366,4 +388,6 @@ public class HomeControlador implements Initializable{
                     seleccion.compararCoocurrencia(referencia);
                 }
     }
+    
+    //Menús y aperturas de nuevas ventanas
 }

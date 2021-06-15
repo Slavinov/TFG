@@ -19,6 +19,7 @@ public class App extends Application{
      */
     @Override
     public void start(Stage primaryStage) throws Exception{
+        primaryStage.setTitle("Comparación de similaridad");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/HomeVista.fxml"));
         //Parent root = FXMLLoader.load(getClass().getResource("/Vista/HomeVista.fxml"));
         Parent root = (Parent)loader.load();
