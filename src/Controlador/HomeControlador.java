@@ -22,10 +22,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
@@ -39,6 +44,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.annotation.Resources;
 
@@ -89,23 +95,11 @@ public class HomeControlador implements Initializable{
     //Init
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //AnchorPane.setTopAnchor(menuSuperior, 0.0);
-        //AnchorPane.setLeftAnchor(menuSuperior, 0.0);
-        //AnchorPane.setRightAnchor(menuSuperior, 0.0);
-        //AnchorPane.setBottomAnchor(scrollPane, 50.0);
-        //AnchorPane.setRightAnchor(scrollPane, 50.0);
-        //AnchorPane.setTopAnchor(scrollPane, 250.0);
-        //AnchorPane.setLeftAnchor(scrollPane, 220.0);
-        //AnchorPane.setLeftAnchor(barraHerramientas, 0.0);
-        //AnchorPane.setRightAnchor(barraHerramientas, 0.0);
         //Cargar datos
         modelo = new FachadaModelo();
         modelo.init();
-        //menuSuperior.setPrefWidth(Double.MAX_VALUE);
-        //menuSuperior.prefWidthProperty().bind(anchorPane.prefWidthProperty());
         //Establecer el path inicial?
-        
-        
+                
         //Actualizar la vista con los workspaces cargados
         TreeItem rootItem = new TreeItem("Workspaces");
         for(int i = 0; i < modelo.getWorkspaces().size(); i++){
@@ -139,8 +133,14 @@ public class HomeControlador implements Initializable{
                     //Crear aquí otra caja personalizada que contenga el image view y el texto nombre de la imagen
                     for(int i = 0; i < seleccion.getImagenes().size(); i++){//Aquí null pointer exception al sacar las miniaturas                      
                         Pane entrada = new Pane();
-                        entrada.getChildren().add(new ImageView(seleccion.getImagenes().get(i).getMiniatura()));
-                        entrada.getChildren().add(new Label(seleccion.getImagenes().get(i).getNombre()));                      
+                        entrada.setPadding(new Insets(15, 15, 15, 15));
+                        Label temp = new Label(seleccion.getImagenes().get(i).getNombre());
+                        temp.setGraphic(new ImageView(seleccion.getImagenes().get(i).getMiniatura()));
+                        temp.setContentDisplay(ContentDisplay.TOP);
+                        entrada.getChildren().add(temp);
+                        
+                        //entrada.getChildren().add(new ImageView(seleccion.getImagenes().get(i).getMiniatura()));
+                        //entrada.getChildren().add(new Label(seleccion.getImagenes().get(i).getNombre()));                      
                         gp.add(entrada, i, i);
                     }
                     scrollPane.setContent(gp);
@@ -154,7 +154,7 @@ public class HomeControlador implements Initializable{
                                 Object source = event.getSource();
                                 if(source instanceof Pane){
                                     Pane temp = ((Pane)source);
-                                    Label temp2 = (Label) temp.getChildren().get(1);
+                                    Label temp2 = (Label) temp.getChildren().get(0);
                                     System.out.println(temp2.getText());
                                     imagenSeleccionada = temp2.getText();
                                 }
@@ -168,10 +168,7 @@ public class HomeControlador implements Initializable{
                             
                         });
                     });
-                    
-                    
-                    
-                    
+                                       
                     }
                     
                 }else{
@@ -217,6 +214,7 @@ public class HomeControlador implements Initializable{
         modelo.guardarConfig();
     }
 
+    /*
     @FXML
     public void crearWorkspace(ActionEvent event){
         //Comprobar que el nombre no esté repetido y que no esté en blanco el campo y que contenga como mucho _   
@@ -264,13 +262,8 @@ public class HomeControlador implements Initializable{
             alert.showAndWait();
         }
     }
-    
-    //Crear una nueva vista en plan popup (en marcadores)
-    @FXML
-    public void testAction(ActionEvent event){
-        System.out.println("Funciono2!");
-        
-    } 
+    */
+ 
     
     @FXML
     public void abrirWorkspace(ActionEvent event){ //Meter alguna forma para reconocer que se trata de un workspace creado? Archivo de texto invisible o algo
@@ -390,4 +383,27 @@ public class HomeControlador implements Initializable{
     }
     
     //Menús y aperturas de nuevas ventanas
+    @FXML 
+    public void nuevoWorkspace(ActionEvent event) throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/NuevoWorkspace.fxml"));
+        Parent root = (Parent)loader.load();
+        NuevoWorkspaceController controller = (NuevoWorkspaceController)loader.getController();
+        Stage stageLocal = new Stage();
+        stageLocal.initModality(Modality.APPLICATION_MODAL);
+        stageLocal.initOwner(stage);
+        stageLocal.setTitle("Selecciona nombre para el Workspace");
+        //Setters para todos los atributos
+        controller.setModelo(modelo);
+        controller.setStage(stageLocal);
+        controller.setWsTree(wsTree);
+        
+        stageLocal.setScene(new Scene(root));
+        stageLocal.show();
+    }
+    
+    @FXML
+    public void salir(ActionEvent event) throws IOException{
+        modelo.close();
+        stage.close();
+    }
 }

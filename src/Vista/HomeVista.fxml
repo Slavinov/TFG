@@ -29,15 +29,15 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Archivo">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Nuevo Workspace..." />
+                    <MenuItem mnemonicParsing="false" onAction="#nuevoWorkspace" text="Nuevo Workspace..." />
                         <MenuItem mnemonicParsing="false" text="Abrir Workspace..." />
-                        <MenuItem mnemonicParsing="false" text="Cerrar Workspace" />
-                        <MenuItem mnemonicParsing="false" text="Borrar Workspace" />
+                        <MenuItem disable="true" mnemonicParsing="false" text="Cerrar Workspace" />
+                        <MenuItem disable="true" mnemonicParsing="false" text="Borrar Workspace" />
                         <MenuItem mnemonicParsing="false" text="Configuración..." />
-                        <MenuItem mnemonicParsing="false" text="Salir" />
+                        <MenuItem mnemonicParsing="false" onAction="#salir" text="Salir" />
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Workspace">
+                <Menu disable="true" mnemonicParsing="false" text="Workspace">
                   <items>
                     <MenuItem mnemonicParsing="false" text="Añadir imagenes..." />
                         <MenuItem mnemonicParsing="false" text="Borrar imagen" />
@@ -51,11 +51,6 @@
                     <MenuItem mnemonicParsing="false" text="Acerca de..." />
                   </items>
                 </Menu>
-                  <Menu mnemonicParsing="false" text="Unspecified Menu">
-                    <items>
-                      <MenuItem mnemonicParsing="false" text="Action 1" />
-                    </items>
-                  </Menu>
               </menus>
             </MenuBar>
             <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
