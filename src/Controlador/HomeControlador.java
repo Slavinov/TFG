@@ -25,6 +25,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -42,6 +43,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -59,7 +61,8 @@ public class HomeControlador implements Initializable{
     private FachadaModelo modelo; //Singleton?
     private Workspace seleccion; //Workspace seleccionado actualmente
     private String imagenSeleccionada; //Nombre de la imagen seleccionada en el workspace
-    
+    private Label itemSeleccionado = null;
+    private int maxCol = 2;
     //Atributos de elementos de JavaFX
     @FXML
     private TextField nombre;
@@ -119,10 +122,14 @@ public class HomeControlador implements Initializable{
 
                 TreeItem<String> selectedItem = (TreeItem<String>) newValue;
                 System.out.println("Selected Text : " + selectedItem.getValue());
-                // do what ever you want
                 if(!selectedItem.getValue().equals("Workspaces")){
                     System.out.println("Cambiando de seleccion");
                     //Se cambia el workspace seleccionado, cargando las imágenes y todo eso
+                    if(seleccion != null){
+                        if(seleccion.getNombre() != selectedItem.getValue()){
+                            extraerCor.setDisable(true);
+                        }
+                    }
                     seleccion = modelo.obtenerWorkspace(selectedItem.getValue());
                     if(seleccion != null){
                         addImage.setDisable(false);
@@ -130,33 +137,135 @@ public class HomeControlador implements Initializable{
                     
                     //LÓGICA DE VISUALIZACIÓN DE IMAGENES -> Se debería añadir también un context menu o algo a cada imagen
                     GridPane gp = new GridPane();
+                    gp.setPadding(new Insets(15, 15, 15, 15));
                     //Crear aquí otra caja personalizada que contenga el image view y el texto nombre de la imagen
-                    for(int i = 0; i < seleccion.getImagenes().size(); i++){//Aquí null pointer exception al sacar las miniaturas                      
+                    int nFila = 0;
+                    int nCol = 0;
+                    maxCol = ((int)scrollPane.getWidth())/130;
+                    if(maxCol < 2){
+                        maxCol = 2;
+                    }
+                    System.out.println(maxCol);
+                    for(int i = 0; i < seleccion.getImagenes().size(); i++){                     
+                        if(nCol == maxCol){
+                            nFila = nFila+1;
+                            nCol = 0;
+                        }
+                        
                         Pane entrada = new Pane();
-                        entrada.setPadding(new Insets(15, 15, 15, 15));
+                        entrada.setPadding(new Insets(15, 5, 15, 5));
                         Label temp = new Label(seleccion.getImagenes().get(i).getNombre());
+                        temp.setMaxWidth(120.0);
+                        temp.setMinWidth(120.0);
+                        temp.setWrapText(true);
+                        temp.setTextAlignment(TextAlignment.CENTER);
+                        temp.setAlignment(Pos.CENTER);
+                        temp.getStyleClass().add("item");
+                        temp.setPadding(new Insets(10,0,10,0));
                         temp.setGraphic(new ImageView(seleccion.getImagenes().get(i).getMiniatura()));
                         temp.setContentDisplay(ContentDisplay.TOP);
                         entrada.getChildren().add(temp);
                         
                         //entrada.getChildren().add(new ImageView(seleccion.getImagenes().get(i).getMiniatura()));
-                        //entrada.getChildren().add(new Label(seleccion.getImagenes().get(i).getNombre()));                      
-                        gp.add(entrada, i, i);
+                        //entrada.getChildren().add(new Label(seleccion.getImagenes().get(i).getNombre())); 
+                        
+                        gp.add(entrada, nCol, nFila);
+                        nCol++;
                     }
                     scrollPane.setContent(gp);
-                    //Añadir un listener y context menu para seleccionar imagenes en el scrollpane
+                    //Listener del scrollpane para cambios de anchura: vuelve a recalcular el número de columnas
+                    scrollPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+                        if(((int)scrollPane.getWidth())/130 != maxCol){
+                            //Se vuelve a recalcular todo
+                            System.out.println("Recalculando posiciones de imagenes!");
+                            maxCol = ((int)scrollPane.getWidth())/130;
+                            if(maxCol < 2){
+                                maxCol = 2;
+                            }
+                            int nFila2 = 0;
+                            int nCol2 = 0;
+                            GridPane gp2 = new GridPane();
+                            gp2.setPadding(new Insets(15, 15, 15, 15));
+                            for(int i = 0; i < seleccion.getImagenes().size(); i++){                     
+                                if(nCol2 == maxCol){
+                                    nFila2 = nFila2+1;
+                                    nCol2 = 0;
+                                }
+
+                                Pane entrada = new Pane();
+                                entrada.setPadding(new Insets(15, 5, 15, 5));
+                                Label temp = new Label(seleccion.getImagenes().get(i).getNombre());
+                                temp.setMaxWidth(120.0);
+                                temp.setMinWidth(120.0);
+                                temp.setWrapText(true);
+                                temp.setTextAlignment(TextAlignment.CENTER);
+                                temp.setAlignment(Pos.CENTER);
+                                temp.getStyleClass().add("item");
+                                temp.setPadding(new Insets(10,0,10,0));
+                                temp.setGraphic(new ImageView(seleccion.getImagenes().get(i).getMiniatura()));
+                                temp.setContentDisplay(ContentDisplay.TOP);
+                                entrada.getChildren().add(temp);
+
+                                //entrada.getChildren().add(new ImageView(seleccion.getImagenes().get(i).getMiniatura()));
+                                //entrada.getChildren().add(new Label(seleccion.getImagenes().get(i).getNombre())); 
+
+                                gp2.add(entrada, nCol2, nFila2);
+                                nCol2++;
+                            }
+                            scrollPane.setContent(gp2);
+                            gp2.getChildren().forEach(item -> {
+                                item.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                                @Override
+                                    public void handle(MouseEvent event) {
+                                        //Deselecciona la imagen anterior
+                                        if(itemSeleccionado != null){
+                                            itemSeleccionado.setStyle(null);
+                                        }
+                                                                          
+                                        Object source = event.getSource();
+                                        if(source instanceof Pane){
+                                            Pane temp = ((Pane)source);
+                                            Label temp2 = (Label) temp.getChildren().get(0);
+                                            System.out.println(temp2.getText());
+                                            imagenSeleccionada = temp2.getText();
+                                            
+                                            //Selección del label con css
+                                            itemSeleccionado = temp2;
+                                            itemSeleccionado.setStyle("-fx-background-color: blue;");
+                                            
+                                        }
+                                        System.out.println("Clickao en mi");
+                                        if(imagenSeleccionada != null){
+                                            extraerCor.setDisable(false);
+                                        }else{
+                                            extraerCor.setDisable(true);
+                                        }
+                                    }
+                                });
+                            });
+                        }
+                    });
                     
-                    
+                    //Añadir un listener y context menu para seleccionar imagenes en el scrollpane                 
                     gp.getChildren().forEach(item -> {
                         item.setOnMouseClicked(new EventHandler<MouseEvent>(){
                             @Override
                             public void handle(MouseEvent event) {
+                                //Deselecciona la imagen anterior
+                                if(itemSeleccionado != null){
+                                    itemSeleccionado.setStyle(null);
+                                }
+                                
                                 Object source = event.getSource();
                                 if(source instanceof Pane){
                                     Pane temp = ((Pane)source);
                                     Label temp2 = (Label) temp.getChildren().get(0);
                                     System.out.println(temp2.getText());
                                     imagenSeleccionada = temp2.getText();
+                                    
+                                    //Selección del label con css
+                                    itemSeleccionado = temp2;
+                                    itemSeleccionado.setStyle("-fx-background-color: blue;");
                                 }
                                 System.out.println("Clickao en mi");
                                 if(imagenSeleccionada != null){
@@ -318,7 +427,7 @@ public class HomeControlador implements Initializable{
     
     //Añadir imágenes a un workspace seleccionado
     @FXML public void anhadirImagen(){
-        FileChooser fileChooser = new FileChooser();
+                FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Selección de imágenes");
                 fileChooser.getExtensionFilters().addAll(
                         new FileChooser.ExtensionFilter("Todo", "*.*"),
@@ -366,20 +475,28 @@ public class HomeControlador implements Initializable{
     
     @FXML 
     public void compararCorrelacion(ActionEvent event){
-        FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Selección de imagen de referencia");
-                fileChooser.getExtensionFilters().addAll(
-                        new FileChooser.ExtensionFilter("Todo", "*.*"),
-                        new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                        new FileChooser.ExtensionFilter("PNG", "*.png"),
-                        new FileChooser.ExtensionFilter("BMP", "*.bmp"),
-                        new FileChooser.ExtensionFilter("TIF", "*.tif")
-                        
-                );
-                File referencia = fileChooser.showOpenDialog(stage);
-                if(referencia != null){
-                    seleccion.compararCoocurrencia(referencia);
-                }
+        if(seleccion.getImagenes().size() > 2){
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Selección de imagen de referencia");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Todo", "*.*"),
+                    new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                    new FileChooser.ExtensionFilter("PNG", "*.png"),
+                    new FileChooser.ExtensionFilter("BMP", "*.bmp"),
+                    new FileChooser.ExtensionFilter("TIF", "*.tif")
+
+            );
+            File referencia = fileChooser.showOpenDialog(stage);
+            if(referencia != null){
+                seleccion.compararCoocurrencia(referencia);
+            }
+        }else{
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Imágenes insuficientes");
+            alert.setHeaderText(null);
+            alert.setContentText("Debe haber 2 o más imágenes en el workspace para realizar una comparación");
+            alert.showAndWait();
+        }
     }
     
     //Menús y aperturas de nuevas ventanas

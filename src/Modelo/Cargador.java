@@ -60,7 +60,7 @@ public class Cargador {
         BufferedImage resultado = null;
         
         try {
-            java.awt.Image temp = ImageIO.read(entrada).getScaledInstance(50, 50, BufferedImage.SCALE_SMOOTH);
+            java.awt.Image temp = ImageIO.read(entrada).getScaledInstance(100, 100, BufferedImage.SCALE_SMOOTH);
             resultado = this.toBufferedImage(temp);
         } catch (IOException ex) {
             Logger.getLogger(Cargador.class.getName()).log(Level.SEVERE, null, ex);
