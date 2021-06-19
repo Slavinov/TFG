@@ -7,8 +7,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ComparacionController">
+<AnchorPane id="AnchorPane" prefHeight="190.0" prefWidth="427.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ComparacionController">
     <stylesheets>
-        <URL value="@comparacion.css"/>
+        <URL value="@comparacion.css" />
     </stylesheets>
+   <children>
+      <ChoiceBox layoutX="139.0" layoutY="83.0" prefWidth="150.0" />
+      <Label layoutX="33.0" layoutY="87.0" text="Tipo de descriptor:" />
+      <Button layoutX="14.0" layoutY="155.0" mnemonicParsing="false" text="Cerrar" />
+      <Button layoutX="344.0" layoutY="155.0" mnemonicParsing="false" text="Comparar" />
+   </children>
 </AnchorPane>

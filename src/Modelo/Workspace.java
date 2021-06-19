@@ -142,6 +142,7 @@ public class Workspace {
                 objetivo.setMiniatura(miniatura);
                 System.out.println("Imagen añadida!");
                 this.imagenes.add(objetivo);
+                this.extrator.detectarDescriptores(objetivo,carpeta); //Detecta archivos de descriptores existentes y añade descriptores
             }catch(Exception e){
                 System.out.println(e.getMessage());
             }
@@ -198,6 +199,9 @@ public class Workspace {
                 }
             }
             objetivo.getDescriptores().add(descriptor); //Introduce el descriptor dentro del objeto imagen
+            
+            //Escribir el descriptor en un archivo de texto
+            this.extrator.guardarDescriptorCoocurrencia(descriptor);
         }
     }
     

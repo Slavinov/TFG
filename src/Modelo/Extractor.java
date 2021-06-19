@@ -4,6 +4,16 @@ import static Modelo.InterfazCVIPTools.COLOR_FORMAT.GRAY_SCALE;
 import static Modelo.InterfazCVIPTools.CVIP_TYPE.CVIP_INTEGER;
 import static Modelo.InterfazCVIPTools.FORMAT.REAL;
 import static Modelo.InterfazCVIPTools.IMAGE_FORMAT.JPG;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Clase puente con los métodos principales de extracción de descriptores a partir de una imagen, añadir herencia quizas¿?
@@ -64,5 +74,136 @@ public class Extractor {
         System.out.println("Descriptor obtenido con éxito!" + resultado.getEnergy()[4]); //Debe dar 0.32708114 para car.bmp
        
         return resultado;
+    }
+    
+    //Otros descriptores
+    
+    //Guardado de descriptores en archivos de texto:
+    
+    //Coocurrencia
+    public void guardarDescriptorCoocurrencia(DescriptorCoocurrencia entrada){
+        File file = new File(entrada.getCarpetaDescriptor().getAbsolutePath()+"\\"+entrada.getNombreImagen()+".txt");             
+        FileWriter f;
+        
+        try{
+            f = new FileWriter(file,false);
+            //Se escriben los contenidos
+            f.write("--Distancia--\n");
+            f.write(Integer.toString(entrada.getDistancia())+"\n");
+            f.write("--Energia--\n");
+            for(int i=0; i<6; i++){
+              f.write(Float.toString(entrada.getEnergy()[i])+"\n");
+            }
+            f.write("--Inercia--\n");
+            for(int i=0; i<6; i++){
+                f.write(Float.toString(entrada.getInertia()[i])+"\n");
+            }
+            f.write("--Correlacion--\n");
+            for(int i=0; i<6; i++){
+                f.write(Float.toString(entrada.getCorrelation()[i])+"\n");
+            }
+            f.write("--IDM--\n");
+            for(int i=0; i<6; i++){
+                f.write(Float.toString(entrada.getIDM()[i])+"\n");
+            }
+            f.write("--Entropia--\n");
+            for(int i=0; i<6; i++){
+                if(i==5){
+                    f.write(Float.toString(entrada.getEntropy()[i]));
+                    break;
+                }
+                f.write(Float.toString(entrada.getEntropy()[i])+"\n");
+            }
+            f.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+    
+    //Leer descriptores
+    public void detectarDescriptores(Imagen entrada, File carpeta){
+        System.out.println("Detectando descriptores...");
+        boolean error = false;
+        String path = carpeta.getAbsolutePath()+"\\"+"Coocurrencia";
+        Path path2 = Paths.get(path);
+        //Coocurrencia----
+        if(Files.exists(path2)){ //Primero comprobar si existe la carpeta, si no existe pues no hay descriptores
+            //Lo siguiente es comprobar si existe el archivo
+            File f = new File(path+"\\"+entrada.getNombre()+".txt");
+            if(f.exists()){
+                DescriptorCoocurrencia resultado = new DescriptorCoocurrencia();
+                resultado.setNombreImagen(entrada.getNombre());
+                resultado.setCarpetaDescriptor(new File(carpeta.getAbsolutePath()+"\\"+"Coocurrencia"));
+                //Se extrae el descriptor del archivo de testo y se carga en el objeto de imagen
+                try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+                    String line;
+                    if((line = br.readLine())!=null){
+                        if((line = br.readLine())!=null){
+                            resultado.setDistancia(Integer.parseInt(line));
+                        }else{error=true;}
+                    }else{error=true;}
+                    //Energía
+                    br.readLine();
+                    float[] energia = new float[6];
+                    for(int i = 0; i < 6; i++){
+                        if((line = br.readLine()) != null){
+                            energia[i] = Float.parseFloat(line);
+                        }else{error=true;}
+                    }
+                    //Inercia
+                    br.readLine();
+                    float[] inercia = new float[6];
+                    for(int i = 0; i < 6; i++){
+                        if((line = br.readLine()) != null){
+                            inercia[i] = Float.parseFloat(line);
+                        }else{error=true;}
+                    }
+                    br.readLine();
+                    //Correlacion
+                    float[] correlacion = new float[6];
+                    for(int i = 0; i < 6; i++){
+                        if((line = br.readLine()) != null){
+                            correlacion[i] = Float.parseFloat(line);
+                        }else{error=true;}
+                    }
+                    //IDM
+                    br.readLine();
+                    float[] idm = new float[6];
+                    for(int i = 0; i < 6; i++){
+                        if((line = br.readLine()) != null){
+                            idm[i] = Float.parseFloat(line);
+                        }else{error=true;}
+                    }
+                    //Entropía
+                    br.readLine();
+                    float[] entropia = new float[6];
+                    for(int i = 0; i < 6; i++){
+                        if((line = br.readLine()) != null){
+                            entropia[i] = Float.parseFloat(line);
+                        }else{error=true;}
+                    }
+                    br.close();
+                    
+                    //Se guardan los resultados en el archivo
+                    resultado.setEnergy(energia);
+                    resultado.setInertia(inercia);
+                    resultado.setCorrelation(correlacion);
+                    resultado.setIDM(idm);
+                    resultado.setEntropy(entropia);
+                } catch (Exception ex) {
+                    Logger.getLogger(Extractor.class.getName()).log(Level.SEVERE, null, ex);
+                    error = true;
+                }
+                
+                if(error == false){
+                    System.out.println("Añadiendo descriptor de coocurrencia...");
+                    //Se añade el descriptor a la imagen
+                    entrada.getDescriptores().add(resultado);
+                }
+                error=false;
+            }
+        }
+        
+        //Otros descriptores...
     }
 }

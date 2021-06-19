@@ -15,11 +15,20 @@ public class DescriptorCoocurrencia extends Descriptor{
     public float[] correlation = new float[6];
     public float[] IDM = new float[6];
     public float[] entropy = new float[6];
-
+    public int distancia = 1;
+    
     public float[] getEnergy() {
         return energy;
     }
 
+    public int getDistancia() {
+        return distancia;
+    }
+
+    public void setDistancia(int nivel) {
+        this.distancia = nivel;
+    }   
+    
     public void setEnergy(float[] energy) {
         this.energy = energy;
     }
@@ -56,5 +65,14 @@ public class DescriptorCoocurrencia extends Descriptor{
         this.entropy = entropy;
     }
     
-    
+    public float[][] devolverMatriz(){
+        float[][] resultado = new float[5][];
+        resultado[0] = this.energy;
+        resultado[1] = this.inertia;
+        resultado[2] = this.correlation;
+        resultado[3] = this.IDM;
+        resultado[4] = this.entropy;
+                
+        return resultado;
+    }
 }

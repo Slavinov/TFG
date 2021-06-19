@@ -1,6 +1,7 @@
 package Controlador;
 
 import Modelo.FachadaModelo;
+import Modelo.Imagen;
 import Modelo.Workspace;
 import ValueObjects.ConfigVO;
 import java.awt.Desktop;
@@ -32,13 +33,17 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -164,6 +169,35 @@ public class HomeControlador implements Initializable{
                         temp.setPadding(new Insets(10,0,10,0));
                         temp.setGraphic(new ImageView(seleccion.getImagenes().get(i).getMiniatura()));
                         temp.setContentDisplay(ContentDisplay.TOP);
+                        
+                        //Menú de contexto con click derecho sobre el item:
+                        ContextMenu contextMenu = new ContextMenu();
+                        MenuItem item1 = new MenuItem("Abrir imagen");
+                        item1.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent event) {
+                                abrirImagenActual();
+                            }
+                        });
+                        MenuItem item2 = new MenuItem("Extraer descriptor...");
+                        item2.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent event) {
+                                System.out.println("NO IMPLEMENTADO, DEBE IR A OTRA VENTANA");
+                            }
+                        });
+                        // Add MenuItem to ContextMenu
+                        contextMenu.getItems().addAll(item1, item2);
+                        temp.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+ 
+                            @Override
+                            public void handle(ContextMenuEvent event) {
+
+                                contextMenu.show(temp, event.getScreenX(), event.getScreenY());
+                            }
+                        });
+                        ////////////FIN DE MENÚ DE CONTEXTO/////////////////
+                        
                         entrada.getChildren().add(temp);
                         
                         //entrada.getChildren().add(new ImageView(seleccion.getImagenes().get(i).getMiniatura()));
@@ -176,6 +210,10 @@ public class HomeControlador implements Initializable{
                     //Listener del scrollpane para cambios de anchura: vuelve a recalcular el número de columnas
                     scrollPane.widthProperty().addListener((obs, oldVal, newVal) -> {
                         if(((int)scrollPane.getWidth())/130 != maxCol){
+                            String nombreItemSeleccionado = ""; //Se toma la selección para preservarla
+                            if(itemSeleccionado != null){
+                                nombreItemSeleccionado = itemSeleccionado.getText();
+                            }
                             //Se vuelve a recalcular todo
                             System.out.println("Recalculando posiciones de imagenes!");
                             maxCol = ((int)scrollPane.getWidth())/130;
@@ -195,6 +233,10 @@ public class HomeControlador implements Initializable{
                                 Pane entrada = new Pane();
                                 entrada.setPadding(new Insets(15, 5, 15, 5));
                                 Label temp = new Label(seleccion.getImagenes().get(i).getNombre());
+                                if(seleccion.getImagenes().get(i).getNombre().equals(nombreItemSeleccionado)){
+                                    temp.setStyle("-fx-background-color: blue;");
+                                    itemSeleccionado = temp;
+                                }
                                 temp.setMaxWidth(120.0);
                                 temp.setMinWidth(120.0);
                                 temp.setWrapText(true);
@@ -204,6 +246,35 @@ public class HomeControlador implements Initializable{
                                 temp.setPadding(new Insets(10,0,10,0));
                                 temp.setGraphic(new ImageView(seleccion.getImagenes().get(i).getMiniatura()));
                                 temp.setContentDisplay(ContentDisplay.TOP);
+                                
+                                //Menú de contexto con click derecho sobre el item:
+                                ContextMenu contextMenu = new ContextMenu();
+                                MenuItem item1 = new MenuItem("Abrir imagen");
+                                item1.setOnAction(new EventHandler<ActionEvent>() {
+                                    @Override
+                                    public void handle(ActionEvent event) {
+                                        abrirImagenActual();
+                                    }
+                                });
+                                MenuItem item2 = new MenuItem("Extraer descriptor...");
+                                item2.setOnAction(new EventHandler<ActionEvent>() {
+                                    @Override
+                                    public void handle(ActionEvent event) {
+                                        System.out.println("NO IMPLEMENTADO, DEBE IR A OTRA VENTANA");
+                                    }
+                                });
+                                // Add MenuItem to ContextMenu
+                                contextMenu.getItems().addAll(item1, item2);
+                                temp.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+
+                                    @Override
+                                    public void handle(ContextMenuEvent event) {
+
+                                        contextMenu.show(temp, event.getScreenX(), event.getScreenY());
+                                    }
+                                });
+                                ////////////FIN DE MENÚ DE CONTEXTO/////////////////
+                                
                                 entrada.getChildren().add(temp);
 
                                 //entrada.getChildren().add(new ImageView(seleccion.getImagenes().get(i).getMiniatura()));
@@ -240,6 +311,13 @@ public class HomeControlador implements Initializable{
                                         }else{
                                             extraerCor.setDisable(true);
                                         }
+                                        
+                                        if(event.getButton().equals(MouseButton.PRIMARY)){
+                                            if(event.getClickCount() == 2){
+                                                System.out.println("Doble click");
+                                                abrirImagenActual();
+                                            }
+                                        }
                                     }
                                 });
                             });
@@ -272,6 +350,13 @@ public class HomeControlador implements Initializable{
                                     extraerCor.setDisable(false);
                                 }else{
                                     extraerCor.setDisable(true);
+                                }
+                                
+                                if(event.getButton().equals(MouseButton.PRIMARY)){
+                                    if(event.getClickCount() == 2){
+                                        System.out.println("Doble click");
+                                        abrirImagenActual();        
+                                    }
                                 }
                             }
                             
@@ -467,11 +552,6 @@ public class HomeControlador implements Initializable{
         }
     }
     
-    @FXML
-    public void extraerDescriptor(ActionEvent event){ 
-        System.out.println("Extraer descriptor de la imagen: " + imagenSeleccionada);
-        seleccion.extraerDescriptorCoocurrencia(imagenSeleccionada);
-    }
     
     @FXML 
     public void compararCorrelacion(ActionEvent event){
@@ -499,6 +579,20 @@ public class HomeControlador implements Initializable{
         }
     }
     
+    //Abre la versión completa de la imagen seleccionada actualmente
+    private void abrirImagenActual(){
+        System.out.println("Abriendo...");
+        try {
+            desktop.open(new File(seleccion.getPath()+"\\"+imagenSeleccionada));
+        } catch (IOException ex) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Error al abrir imagen");
+            alert.setHeaderText(null);
+            alert.setContentText("La imagen no existe o no hay un visualizador de imágenes instalado en el sistema");
+            alert.showAndWait();
+        }
+    }
+    
     //Menús y aperturas de nuevas ventanas
     @FXML 
     public void nuevoWorkspace(ActionEvent event) throws IOException{
@@ -509,13 +603,45 @@ public class HomeControlador implements Initializable{
         stageLocal.initModality(Modality.APPLICATION_MODAL);
         stageLocal.initOwner(stage);
         stageLocal.setTitle("Selecciona nombre para el Workspace");
+        stageLocal.setResizable(false); //Evitar que se pueda cambiar de tam
         //Setters para todos los atributos
         controller.setModelo(modelo);
         controller.setStage(stageLocal);
         controller.setWsTree(wsTree);
-        
         stageLocal.setScene(new Scene(root));
         stageLocal.show();
+    }
+    
+    @FXML
+    public void extraerDescriptor(ActionEvent event) throws IOException{ 
+        //Se obtiene referencia a la imagen:
+        Imagen objetivo = null;
+        for(int i = 0; i<seleccion.getImagenes().size(); i++){
+            if(seleccion.getImagenes().get(i).getNombre().equals(imagenSeleccionada)){
+                objetivo = seleccion.getImagenes().get(i);
+            }
+        }
+        
+        if(objetivo != null){
+            System.out.println("Extraer descriptor de la imagen: " + imagenSeleccionada);
+            //seleccion.extraerDescriptorCoocurrencia(imagenSeleccionada);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/Extraccion.fxml"));
+            Parent root = (Parent)loader.load();
+            ExtraccionController controller = (ExtraccionController)loader.getController();
+            Stage stageLocal = new Stage();
+            stageLocal.initModality(Modality.APPLICATION_MODAL);
+            stageLocal.initOwner(stage);
+            stageLocal.setTitle("Descriptores de " + imagenSeleccionada);
+            //stageLocal.setResizable(false); //Evitar que se pueda cambiar de tam
+            //Setters para todos los atributos
+            controller.setModelo(modelo);
+            controller.setImagen(objetivo);
+            controller.setStage(stageLocal);
+            controller.setSeleccion(seleccion);
+            stageLocal.setScene(new Scene(root));
+            stageLocal.show();
+        }
+        
     }
     
     @FXML

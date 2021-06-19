@@ -41,7 +41,7 @@
                   <items>
                     <MenuItem mnemonicParsing="false" text="Añadir imagenes..." />
                         <MenuItem mnemonicParsing="false" text="Borrar imagen" />
-                        <MenuItem mnemonicParsing="false" text="Extraer descriptor..." />
+                        <MenuItem mnemonicParsing="false" text="Descriptores..." />
                         <MenuItem mnemonicParsing="false" text="Realizar Comparativa..." />
                   </items>
                 </Menu>
@@ -71,8 +71,8 @@
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
                <children>
                   <Button fx:id="compararBtn" disable="true" layoutX="720.0" layoutY="6.0" mnemonicParsing="false" onAction="#compararCorrelacion" text="Comparar" AnchorPane.rightAnchor="11.0" />
-                  <Button fx:id="extraerCor" disable="true" layoutX="638.0" layoutY="6.0" mnemonicParsing="false" onAction="#extraerDescriptor" text="Extraer" AnchorPane.rightAnchor="101.0" />
-                  <Button fx:id="addImage" disable="true" layoutX="521.0" layoutY="6.0" mnemonicParsing="false" onAction="#anhadirImagen" text="Añadir imagen" AnchorPane.rightAnchor="202.0" />
+                  <Button fx:id="extraerCor" disable="true" layoutX="638.0" layoutY="6.0" mnemonicParsing="false" onAction="#extraerDescriptor" text="Descriptores" AnchorPane.rightAnchor="101.0" />
+                  <Button fx:id="addImage" disable="true" layoutX="521.0" layoutY="6.0" mnemonicParsing="false" onAction="#anhadirImagen" text="Añadir imagenes" AnchorPane.rightAnchor="202.0" />
                   <Button layoutX="7.0" layoutY="4.0" mnemonicParsing="false" onAction="#abrirWorkspace" text="A" AnchorPane.leftAnchor="7.0" />
                   <Button layoutX="31.0" layoutY="4.0" mnemonicParsing="false" onAction="#cerrarWorkspace" text="C" AnchorPane.leftAnchor="30.0" />
                   <Button layoutX="55.0" layoutY="4.0" mnemonicParsing="false" onAction="#borrarWorkspace" text="B" AnchorPane.leftAnchor="54.0" />

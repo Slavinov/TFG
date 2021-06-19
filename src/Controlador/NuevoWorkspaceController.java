@@ -72,6 +72,7 @@ public class NuevoWorkspaceController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
         // TODO
     }    
     
@@ -117,11 +118,20 @@ public class NuevoWorkspaceController implements Initializable {
                 alert.showAndWait();
             }
         }else{
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Nombre inválido");
-            alert.setHeaderText(null);
-            alert.setContentText("El nombre del Workspace debe contener únicamente letras y/o números");
-            alert.showAndWait();
+            
+            if(nombre.getText().equals("")){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Nombre vacío");
+                alert.setHeaderText(null);
+                alert.setContentText("Introduce un nombre para el workspace");
+                alert.showAndWait();
+            }else{
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Nombre inválido");
+                alert.setHeaderText(null);
+                alert.setContentText("El nombre del Workspace debe contener únicamente letras y/o números");
+                alert.showAndWait();
+            }
         }
     }
     
