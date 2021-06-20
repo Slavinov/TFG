@@ -89,27 +89,29 @@ public class NuevoWorkspaceController implements Initializable {
                 System.out.println("Funciono!");
                 //Creación de nuevo Workspace
                     //workspaces.add(new Workspace(nombre.getText()));
-                    Workspace nuevoWorkspace = modelo.crearWorkspace(nombre.getText());
+                Workspace nuevoWorkspace = modelo.crearWorkspace(nombre.getText());
+                if(nuevoWorkspace != null){
                     wsTree.getRoot().getChildren().add(new TreeItem(nuevoWorkspace.getNombre()));
-                //Selector de archivos
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Selección de imágenes");
-                fileChooser.getExtensionFilters().addAll(
-                        new FileChooser.ExtensionFilter("Todo", "*.*"),
-                        new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                        new FileChooser.ExtensionFilter("PNG", "*.png"),
-                        new FileChooser.ExtensionFilter("BMP", "*.bmp"),
-                        new FileChooser.ExtensionFilter("TIF", "*.tif")
-                        
-                );
-                List<File> list = fileChooser.showOpenMultipleDialog(stage);
+                    //Selector de archivos
+                    FileChooser fileChooser = new FileChooser();
+                    fileChooser.setTitle("Selección de imágenes");
+                    fileChooser.getExtensionFilters().addAll(
+                            new FileChooser.ExtensionFilter("Todo", "*.*"),
+                            new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                            new FileChooser.ExtensionFilter("PNG", "*.png"),
+                            new FileChooser.ExtensionFilter("BMP", "*.bmp"),
+                            new FileChooser.ExtensionFilter("TIF", "*.tif")
 
-                if (list != null){
-                    for (File file : list){
-                        openFile(file, nuevoWorkspace);
+                    );
+                    List<File> list = fileChooser.showOpenMultipleDialog(stage);
+
+                    if (list != null){
+                        for (File file : list){
+                            openFile(file, nuevoWorkspace);
+                        }
                     }
-                }
-                stage.close();
+                    stage.close();
+                }              
             }else{
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Workspace existente");

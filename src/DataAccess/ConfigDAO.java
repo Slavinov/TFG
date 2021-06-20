@@ -21,11 +21,11 @@ public class ConfigDAO extends AbstractDAO{
     public void initConfig(){     
         try{
             Statement s = this.getConexion().createStatement();
-            s.execute("CREATE TABLE Config(defaultPath varchar(255), id int primary key)");
+            s.execute("CREATE TABLE Config(defaultPath varchar(255), distancia int, id int primary key)");
             s.close();
             
             Statement i = this.getConexion().createStatement();
-            i.executeUpdate("insert into Config values(null, 0)");
+            i.executeUpdate("insert into Config values(null, 1, 0)");
             i.close();
         }catch(SQLException se){  
             System.err.println("Error al crear tabla Config");
@@ -38,9 +38,10 @@ public class ConfigDAO extends AbstractDAO{
         try{
             //Inserción de nueva configuración
             PreparedStatement psInsert;
-            psInsert = this.getConexion().prepareStatement("update Config SET defaultPath=? WHERE id=0");
+            psInsert = this.getConexion().prepareStatement("update Config SET defaultPath=?, distancia=? WHERE id=0");
             this.getStatements().add(psInsert);
             psInsert.setString(1, entrada.getDefaultPath());
+            psInsert.setInt(2, entrada.getDistancia());
             psInsert.executeUpdate();
             
         }catch(SQLException se){  
@@ -56,9 +57,10 @@ public class ConfigDAO extends AbstractDAO{
         try{
             Statement s = this.getConexion().createStatement();
             rs = s.executeQuery(
-                    "SELECT defaultPath FROM Config");
+                    "SELECT defaultPath, distancia FROM Config");
             while(rs.next()) {
-                resultado.setDefaultPath(rs.getString("defaultPath"));
+                resultado.setDefaultPath(rs.getString("defaultPath"));           
+                resultado.setDistancia(rs.getInt("distancia"));             
                 //System.out.println("Entrada: num = " + rs.getInt("num") + " addr = " + rs.getString("addr"));
             }
         }catch(SQLException se){

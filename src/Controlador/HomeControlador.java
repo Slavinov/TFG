@@ -107,7 +107,7 @@ public class HomeControlador implements Initializable{
         modelo = new FachadaModelo();
         modelo.init();
         //Establecer el path inicial?
-                
+        
         //Actualizar la vista con los workspaces cargados
         TreeItem rootItem = new TreeItem("Workspaces");
         for(int i = 0; i < modelo.getWorkspaces().size(); i++){
@@ -377,6 +377,7 @@ public class HomeControlador implements Initializable{
         );
     }
    
+    /*
     @FXML
     public void establecerPathPorDefecto(ActionEvent event){
         //FileChooser fileChooser = new FileChooser();
@@ -401,13 +402,14 @@ public class HomeControlador implements Initializable{
             }
         }
     }
-    
+  */  
+    /*
     @FXML
     public void resetearPath(ActionEvent event){
         modelo.setPath(null);
         modelo.guardarConfig();
     }
-
+*/
     /*
     @FXML
     public void crearWorkspace(ActionEvent event){
@@ -554,7 +556,32 @@ public class HomeControlador implements Initializable{
     
     
     @FXML 
-    public void compararCorrelacion(ActionEvent event){
+    public void comparar(ActionEvent event) throws IOException{
+        if(seleccion.getImagenes().size() > 2){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/Comparacion.fxml"));
+            Parent root = (Parent)loader.load();
+            ComparacionController controller = (ComparacionController)loader.getController();
+            Stage stageLocal = new Stage();
+            stageLocal.initModality(Modality.APPLICATION_MODAL);
+            stageLocal.initOwner(stage);
+            stageLocal.setTitle("Modo de comparación");
+            stageLocal.setResizable(false); //Evitar que se pueda cambiar de tam
+            //Setters para todos los atributos
+            controller.setModelo(modelo);
+            controller.setStage(stageLocal);
+            controller.setStagePadre(stage);
+            controller.setSel(seleccion);
+            stageLocal.setScene(new Scene(root));
+            stageLocal.show();
+        
+        }else{
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Imágenes insuficientes");
+            alert.setHeaderText(null);
+            alert.setContentText("Debe haber 2 o más imágenes en el workspace para realizar una comparación");
+            alert.showAndWait();
+        }
+        /*
         if(seleccion.getImagenes().size() > 2){
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Selección de imagen de referencia");
@@ -577,6 +604,7 @@ public class HomeControlador implements Initializable{
             alert.setContentText("Debe haber 2 o más imágenes en el workspace para realizar una comparación");
             alert.showAndWait();
         }
+*/
     }
     
     //Abre la versión completa de la imagen seleccionada actualmente
@@ -642,6 +670,26 @@ public class HomeControlador implements Initializable{
             stageLocal.show();
         }
         
+    }
+    
+    @FXML
+    public void ajustes(ActionEvent event) throws IOException{     
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/Configuracion.fxml"));
+        //Parent root = (Parent)loader.load();
+        //ConfiguracionController controller = (ConfiguracionController)loader.getController();
+        ConfiguracionController controller = new ConfiguracionController(modelo);
+        loader.setController(controller);
+        Parent root = (Parent)loader.load();
+        Stage stageLocal = new Stage();
+        stageLocal.initModality(Modality.APPLICATION_MODAL);
+        stageLocal.initOwner(stage);
+        stageLocal.setTitle("Ajustes");
+        stageLocal.setResizable(false); //Evitar que se pueda cambiar de tam
+        //Setters para todos los atributos
+        //controller.setModelo(modelo);
+        controller.setStage(stageLocal);
+        stageLocal.setScene(new Scene(root));
+        stageLocal.show();
     }
     
     @FXML

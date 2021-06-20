@@ -14,6 +14,15 @@ public class FachadaModelo {
     private ArrayList<Workspace> workspaces;
     private String path; //Path por defecto de los workspaces, establecido o no por el usuario
     private FachadaDAO baseDatos;
+    private int distancia = 1;
+
+    public int getDistancia() {
+        return distancia;
+    }
+
+    public void setDistancia(int distancia) {
+        this.distancia = distancia;
+    }
     
     public FachadaModelo(){
         workspaces = new ArrayList<Workspace>();
@@ -51,6 +60,7 @@ public class FachadaModelo {
         baseDatos.initConfig();
         ConfigVO config = baseDatos.getConfig();
         this.path = config.getDefaultPath();
+        this.distancia = config.getDistancia();
         baseDatos.initWorkspace();
         //Extraer config y Workspaces, meter los workspaces en el arraylist y establecer los atributos de config. En caso de fallo? dejar en blanco todo -> AÑADIR UN ACTIVITY INDICATOR O ALGO
         ArrayList<WorkspaceVO> wk = baseDatos.recuperarWorkspaces();     
@@ -62,6 +72,7 @@ public class FachadaModelo {
                 System.out.println("Detectado workspace: " + carpeta.getName());
                 System.out.println("Nombre del workspace?: " + wk.get(i).getNombre());
                 Workspace nuevo = new Workspace(wk.get(i).getNombre(),wk.get(i).getPath());
+                nuevo.setDistanciaCoocurrencia(distancia);
                 nuevo.setCarpeta(carpeta);
                 this.workspaces.add(nuevo);
                 
@@ -82,6 +93,11 @@ public class FachadaModelo {
     
     //Métodos de gestión de Workspaces
     public Workspace crearWorkspace(String nombre){
+        for(int i = 0; i< workspaces.size(); i++){
+            if(workspaces.get(i).getNombre().equals(nombre)){
+                return null;
+            }
+        }
         Workspace resultado = null;
         //Crear el workspace utilizando el constructor de ese
         WorkspaceVO work = new WorkspaceVO();
@@ -94,7 +110,7 @@ public class FachadaModelo {
             resultado = new Workspace(nombre,path+"\\"+nombre);
             this.workspaces.add(resultado);
             work.setNombre(nombre);
-            work.setPath(this.path);
+            work.setPath(this.path+"\\"+nombre);
         }
         //Guardar su referencia en la BD
         this.baseDatos.insertarWorkspace(work);
@@ -113,17 +129,13 @@ public class FachadaModelo {
         //Añadir referencias a la BD
         Workspace resultado = null;
         
-        if(nombre.equals("Workspaces")){
-            
-        }
-        
-        boolean existe = false;
         for(int i = 0; i< workspaces.size(); i++){
             if(workspaces.get(i).getNombre().equals(nombre)){
                 return null;
             }
         }
         resultado = new Workspace(nombre, path);
+        workspaces.add(resultado);
         WorkspaceVO temp = new WorkspaceVO();
         temp.setNombre(nombre);
         temp.setPath(path);
@@ -166,6 +178,7 @@ public class FachadaModelo {
         //Guardar la configuración en la BD
         ConfigVO c = new ConfigVO();
         c.setDefaultPath(path);
+        c.setDistancia(distancia);
         this.baseDatos.setConfig(c);   
     }
     
@@ -185,5 +198,14 @@ public class FachadaModelo {
         }
         
         return resultado;
+    }
+    
+    public void modificarDistancia(int d){
+        distancia = d;
+        for(int i = 0; i < workspaces.size(); i++){
+            workspaces.get(i).setDistanciaCoocurrencia(distancia);
+        }
+        this.guardarConfig();
+        System.out.println("Distancia modificada! "+d);
     }
 }

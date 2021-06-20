@@ -20,8 +20,9 @@ import java.util.logging.Logger;
  * @author Stanislav
  */
 public class Extractor {
-    public DescriptorCoocurrencia devolverCoocurrencia(Imagen i){
+    public DescriptorCoocurrencia devolverCoocurrencia(Imagen i, int distancia){
         DescriptorCoocurrencia resultado = new DescriptorCoocurrencia();
+        resultado.setDistancia(distancia);
         InterfazCVIPTools lib = InterfazCVIPTools.INSTANCE;
         
         resultado.setNombreImagen(i.getNombre());
@@ -62,7 +63,7 @@ public class Extractor {
         
         //Estructura resultante que devuelve CVIPTools con los valores concretos de la textura
         InterfazCVIPTools.TEXTURE2 res = new InterfazCVIPTools.TEXTURE2();
-        res = lib.texture2(i1, i2, 0, i.getAltura(), i.getAnchura(), 1, 1, 1, 1, 1, 1, 1);
+        res = lib.texture2(i1, i2, 0, i.getAltura(), i.getAnchura(), distancia, 1, 1, 1, 1, 1, 1);
         
         //Se establecen los valores obtenidos en el resutlado:
         resultado.setCorrelation(res.correlation);

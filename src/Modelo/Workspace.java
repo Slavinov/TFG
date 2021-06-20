@@ -27,12 +27,16 @@ public class Workspace {
     private ArrayList<Imagen> resultadoComparacion; //resultado ordenado de la última comparativa, reemplazar el array normal con este en la representación
     private Imagen referencia; //Imagen de referencia para mostrarla en la interfaz
     
+    //Opciones de descriptores
+    private int distanciaCoocurrencia = 1;
+    
     public Workspace(String n){
         imagenes = new ArrayList<Imagen>();
         nombre = n;
         path = System.getProperty("user.home")+"\\Workspaces"; // path por defecto
         new File(path).mkdirs(); //Crea el directorio si no lo hay
-        new File(path+"\\"+nombre).mkdirs(); //Crea el directorio si no lo hay
+        carpeta = new File(path+"\\"+nombre);
+        carpeta.mkdirs(); //Crea el directorio si no lo hay
         path = path+"\\"+nombre;
     }
     
@@ -40,9 +44,18 @@ public class Workspace {
         imagenes = new ArrayList<Imagen>();
         nombre = n;
         path = p; 
-        new File(path).mkdirs(); //Crea el directorio si no lo hay
+        carpeta = new File(path);
+        carpeta.mkdirs(); //Crea el directorio si no lo hay
         //new File(path+"\\"+nombre).mkdirs(); //Crea el directorio si no lo hay
         //path = path+"\\"+nombre;
+    }
+
+    public int getDistanciaCoocurrencia() {
+        return distanciaCoocurrencia;
+    }
+
+    public void setDistanciaCoocurrencia(int distanciaCoocurrencia) {
+        this.distanciaCoocurrencia = distanciaCoocurrencia;
     }
 
     public String getNombre() {
@@ -184,11 +197,11 @@ public class Workspace {
         
         if(objetivo != null){
             //Crea la carpeta de Coocurrencia si no existe:
-            new File(carpeta.getAbsolutePath()+"\\"+"Coocurrencia").mkdir();
+            new File(carpeta.getAbsolutePath()+"\\"+"Coocurrencia").mkdir(); //NULL POINTER al extraer descriptor de un ws recién creado
             //Obtiene la referencia
             File carpetaDescriptor = new File(carpeta.getAbsolutePath()+"\\"+"Coocurrencia");
             //Asociar internamente de alguna forma los descriptores a las imagenes
-            DescriptorCoocurrencia descriptor = this.extrator.devolverCoocurrencia(objetivo);
+            DescriptorCoocurrencia descriptor = this.extrator.devolverCoocurrencia(objetivo,this.distanciaCoocurrencia);
             descriptor.setCarpetaDescriptor(carpetaDescriptor);
             
             //En primer lugar se comprueba que no exista un descriptor de ese mimso tipo, si existe se reemplaza para evitar generar descriptores infinitos:

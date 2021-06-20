@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="411.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="Controlador.ConfiguracionController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@configuracion.css" />
     </stylesheets>
@@ -16,41 +16,57 @@
       <GridPane layoutY="7.0" prefHeight="393.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="165.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="165.0" />
           <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="435.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="23.0" vgrow="NEVER" />
-          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="347.0" vgrow="ALWAYS" />
-          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="1.7976931348623157E308" prefHeight="20.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="28.0" prefHeight="40.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="28.0" prefHeight="30.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="16.0" prefHeight="20.0" vgrow="NEVER" />
+          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="160.0" vgrow="ALWAYS" />
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="40.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <Label text="-Workspaces:">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="-Descriptores coocurrencia:" GridPane.columnSpan="2" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+            </Label>
+            <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets right="10.0" />
+               </GridPane.margin>
+               <content>
+                  <TextField fx:id="path" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="34.0" prefWidth="368.0" />
+               </content>
+            </ScrollPane>
+            <Label text="Path por defecto:" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <children>
-                  <Button layoutX="372.0" mnemonicParsing="false" text="Cerrar" />
+                  <Button layoutX="196.0" layoutY="4.0" mnemonicParsing="false" onAction="#modifyPath" text="Modificar" />
+                  <Button layoutX="131.0" layoutY="4.0" mnemonicParsing="false" onAction="#resetPath" text="Reset" />
+               </children>
+            </Pane>
+            <ComboBox fx:id="distancia" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Label text="*Distancia:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="7">
+               <children>
+                  <Button layoutX="314.0" layoutY="8.0" mnemonicParsing="false" onAction="#cerrar" text="Cerrar" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="14.0" />
                </children>
             </AnchorPane>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
-               <children>
-                  <TreeView prefHeight="359.0" prefWidth="165.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-               </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" />
-               </padding>
-            </AnchorPane>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" />
-               </padding>
-            </AnchorPane>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <Label layoutX="13.0" layoutY="3.0" text="Categorías:" AnchorPane.leftAnchor="0.0">
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
-                  </Label>
-               </children>
-            </AnchorPane>
+            <Label text="*Estas opciones no afectan a los descriptores ya existentes. Surtirán efecto al realizar extracciones o comparaciones nuevas." wrapText="true" GridPane.columnSpan="3" GridPane.rowIndex="6">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+            </Label>
          </children>
       </GridPane>
    </children>

@@ -30,10 +30,10 @@
                 <Menu mnemonicParsing="false" text="Archivo">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#nuevoWorkspace" text="Nuevo Workspace..." />
-                        <MenuItem mnemonicParsing="false" text="Abrir Workspace..." />
+                        <MenuItem mnemonicParsing="false" onAction="#abrirWorkspace" text="Abrir Workspace..." />
                         <MenuItem disable="true" mnemonicParsing="false" text="Cerrar Workspace" />
                         <MenuItem disable="true" mnemonicParsing="false" text="Borrar Workspace" />
-                        <MenuItem mnemonicParsing="false" text="Configuración..." />
+                        <MenuItem mnemonicParsing="false" onAction="#ajustes" text="Configuración..." />
                         <MenuItem mnemonicParsing="false" onAction="#salir" text="Salir" />
                   </items>
                 </Menu>
@@ -70,7 +70,7 @@
             </SplitPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
                <children>
-                  <Button fx:id="compararBtn" disable="true" layoutX="720.0" layoutY="6.0" mnemonicParsing="false" onAction="#compararCorrelacion" text="Comparar" AnchorPane.rightAnchor="11.0" />
+                  <Button fx:id="compararBtn" disable="true" layoutX="720.0" layoutY="6.0" mnemonicParsing="false" onAction="#comparar" text="Comparar" AnchorPane.rightAnchor="11.0" />
                   <Button fx:id="extraerCor" disable="true" layoutX="638.0" layoutY="6.0" mnemonicParsing="false" onAction="#extraerDescriptor" text="Descriptores" AnchorPane.rightAnchor="101.0" />
                   <Button fx:id="addImage" disable="true" layoutX="521.0" layoutY="6.0" mnemonicParsing="false" onAction="#anhadirImagen" text="Añadir imagenes" AnchorPane.rightAnchor="202.0" />
                   <Button layoutX="7.0" layoutY="4.0" mnemonicParsing="false" onAction="#abrirWorkspace" text="A" AnchorPane.leftAnchor="7.0" />
