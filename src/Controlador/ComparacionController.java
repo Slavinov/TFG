@@ -108,7 +108,7 @@ public class ComparacionController implements Initializable {
                 stageLocal.initModality(Modality.APPLICATION_MODAL);
                 stageLocal.initOwner(this.stagePadre);
                 stageLocal.setTitle("Resultado de comparación");
-                //stageLocal.setResizable(false); //Evitar que se pueda cambiar de tam
+                stageLocal.setResizable(false); //Evitar que se pueda cambiar de tam
                 //Setters para todos los atributos
                 //controller.setModelo(modelo);
                 controller.setStage(stageLocal);
