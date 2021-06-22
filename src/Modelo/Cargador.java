@@ -2,6 +2,7 @@ package Modelo;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -25,24 +26,51 @@ public class Cargador {
         int width;
         int height;
         BufferedImage img=null;
+        ColorModel color=null;
         try {
             img = ImageIO.read(entrada);
+            color = img.getColorModel();
+            
         } catch (IOException ex) {
-            Logger.getLogger(Cargador.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error de formato de la imagen");
+            return null;
         }
+        
         width = img.getWidth();
         height = img.getHeight();
         int pix[][] = new int[height][width];
         int pix2[][] = new int[height][width];
         for(int i = 0; i < height; i++){
             for(int j = 0; j < width; j++){
-                int rgb = img.getRGB(j, i);
-                int r = (rgb >> 16) & 0xFF;
-                int g = (rgb >> 8) & 0xFF;
-                int b = (rgb & 0xFF);
-                int gray = (r + g + b) / 3;
-                //System.out.println(gray);
-                pix[i][j] = gray;
+                if((color.getPixelSize() == 24) || (color.getPixelSize() == 32)){ //RGB o RGBA
+                    int rgb = img.getRGB(j, i);
+                    int r = (rgb >> 16) & 0xFF;
+                    int g = (rgb >> 8) & 0xFF;
+                    int b = (rgb & 0xFF);
+                    //int gray = (r + g + b) / 3; 
+                    // Normalización y corrección de gamma:
+                    float rr = (float) Math.pow(r / 255.0, 2.2);
+                    float gg = (float) Math.pow(g / 255.0, 2.2);
+                    float bb = (float) Math.pow(b / 255.0, 2.2);
+
+                    // Cálculo de luminancia:
+                    float lum = (float) (0.2126 * rr + 0.7152 * gg + 0.0722 * bb);
+
+                    // Gamma compand and rescale to byte range:
+                    int grayLevel = (int) (255.0 * Math.pow(lum, 1.0 / 2.2));
+                    int gray = (grayLevel << 16) + (grayLevel << 8) + grayLevel;
+                    pix[i][j] = gray;
+                    
+                    //if(entrada.getName().equals("igor-bogdanov.jpg")){
+                      //  gris.setRGB(j, i, gray);
+                    //}
+                }else if(color.getPixelSize() == 8){ //Escala de grises
+                    int gray = img.getRGB(j, i)& 0xFF;
+                    pix[i][j] = gray;
+                }else{//Profundidad de pixel no soportada
+                    return null;
+                }
+                //Color de máscara por defecto: todo en blanco
                 pix2[i][j] = 255;
             }
         }

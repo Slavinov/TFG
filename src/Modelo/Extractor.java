@@ -91,23 +91,23 @@ public class Extractor {
             //Se escriben los contenidos
             f.write("--Distancia--\n");
             f.write(Integer.toString(entrada.getDistancia())+"\n");
-            f.write("--Energia--\n");
+            f.write("--Energia (0º,45º,90º,135º,media,rango(max-min))--\n");
             for(int i=0; i<6; i++){
               f.write(Float.toString(entrada.getEnergy()[i])+"\n");
             }
-            f.write("--Inercia--\n");
+            f.write("--Inercia (0º,45º,90º,135º,media,rango(max-min))--\n");
             for(int i=0; i<6; i++){
                 f.write(Float.toString(entrada.getInertia()[i])+"\n");
             }
-            f.write("--Correlacion--\n");
+            f.write("--Correlacion (0º,45º,90º,135º,media,rango(max-min))--\n");
             for(int i=0; i<6; i++){
                 f.write(Float.toString(entrada.getCorrelation()[i])+"\n");
             }
-            f.write("--IDM--\n");
+            f.write("--IDM (0º,45º,90º,135º,media,rango(max-min))--\n");
             for(int i=0; i<6; i++){
                 f.write(Float.toString(entrada.getIDM()[i])+"\n");
             }
-            f.write("--Entropia--\n");
+            f.write("--Entropia (0º,45º,90º,135º,media,rango(max-min))--\n");
             for(int i=0; i<6; i++){
                 if(i==5){
                     f.write(Float.toString(entrada.getEntropy()[i]));

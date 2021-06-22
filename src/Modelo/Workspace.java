@@ -2,6 +2,7 @@ package Modelo;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +28,9 @@ public class Workspace {
     private ArrayList<Imagen> resultadoComparacion; //resultado ordenado de la última comparativa, reemplazar el array normal con este en la representación
     private Imagen referencia; //Imagen de referencia para mostrarla en la interfaz
     
+    //Gestión de errores:
+    private ArrayList<String> imagenesErroneas;
+    
     //Opciones de descriptores
     private int distanciaCoocurrencia = 1;
     
@@ -50,6 +54,14 @@ public class Workspace {
         //path = path+"\\"+nombre;
     }
 
+    public ArrayList<String> getImagenesErroneas() {
+        return imagenesErroneas;
+    }
+
+    public void setImagenesErroneas(ArrayList<String> imagenesErroneas) {
+        this.imagenesErroneas = imagenesErroneas;
+    }  
+    
     public int getDistanciaCoocurrencia() {
         return distanciaCoocurrencia;
     }
@@ -156,11 +168,23 @@ public class Workspace {
                 System.out.println("Imagen añadida!");
                 this.imagenes.add(objetivo);
                 this.extrator.detectarDescriptores(objetivo,carpeta); //Detecta archivos de descriptores existentes y añade descriptores
+                
             }catch(Exception e){
                 System.out.println(e.getMessage());
             }
         
-        } catch (IOException ex) {
+        } catch (Exception ex) {
+            if(this.imagenesErroneas == null){
+                this.imagenesErroneas = new ArrayList<String>();
+            }
+            this.imagenesErroneas.add(imagen.getName());
+            //Se elimina la imagen de la carpeta si existe
+            File erroneo = new File(this.path+"\\"+imagen.getName());
+            try {
+                Files.deleteIfExists(erroneo.toPath());
+            } catch (IOException ex1) {
+                Logger.getLogger(Workspace.class.getName()).log(Level.SEVERE, null, ex1);
+            }
             System.out.println("No es una imagen");
         }
     }
@@ -225,8 +249,11 @@ public class Workspace {
         for(int i=0; i<this.imagenes.size(); i++){
             for(int j=0; j<this.imagenes.get(i).getDescriptores().size(); j++){
                 if(this.imagenes.get(i).getDescriptores().get(j) instanceof DescriptorCoocurrencia){
-                    System.out.println("Ya existe descriptor x!");
-                    existe = true;
+                    //comprobar que la distancia es correcta, si no lo es no poner true
+                    if(((DescriptorCoocurrencia)this.imagenes.get(i).getDescriptores().get(j)).getDistancia() == this.distanciaCoocurrencia){
+                        System.out.println("Ya existe descriptor x!");
+                        existe = true;
+                    }
                 }
             }
             if(existe == false){

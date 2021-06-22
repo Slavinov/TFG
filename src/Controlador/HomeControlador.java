@@ -35,9 +35,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -48,6 +50,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -93,7 +96,16 @@ public class HomeControlador implements Initializable{
     
     @FXML
     private MenuBar menuSuperior;
-    
+    @FXML
+    private MenuItem cerrarItem;
+    @FXML
+    private MenuItem borrarItem;
+    @FXML
+    private MenuItem borrarItem2;
+    @FXML
+    private MenuItem descriptorItem;
+    @FXML
+    private Menu wsMenu;
     @FXML
     private Pane barraHerramientas;
     /////////////MÉTODOS////////////////
@@ -129,16 +141,24 @@ public class HomeControlador implements Initializable{
                 System.out.println("Selected Text : " + selectedItem.getValue());
                 if(!selectedItem.getValue().equals("Workspaces")){
                     System.out.println("Cambiando de seleccion");
+                    extraerCor.setDisable(true);
+                    descriptorItem.setDisable(true);
+                    borrarItem2.setDisable(true);
                     //Se cambia el workspace seleccionado, cargando las imágenes y todo eso
                     if(seleccion != null){
                         if(seleccion.getNombre() != selectedItem.getValue()){
                             extraerCor.setDisable(true);
+                            
+                            
                         }
                     }
                     seleccion = modelo.obtenerWorkspace(selectedItem.getValue());
                     if(seleccion != null){
+                        borrarItem.setDisable(false);
+                        cerrarItem.setDisable(false);
                         addImage.setDisable(false);
                         compararBtn.setDisable(false);
+                        wsMenu.setDisable(false);
                     
                     //LÓGICA DE VISUALIZACIÓN DE IMAGENES -> Se debería añadir también un context menu o algo a cada imagen
                     GridPane gp = new GridPane();
@@ -179,11 +199,15 @@ public class HomeControlador implements Initializable{
                                 abrirImagenActual();
                             }
                         });
-                        MenuItem item2 = new MenuItem("Extraer descriptor...");
+                        MenuItem item2 = new MenuItem("Descriptores");
                         item2.setOnAction(new EventHandler<ActionEvent>() {
                             @Override
                             public void handle(ActionEvent event) {
-                                System.out.println("NO IMPLEMENTADO, DEBE IR A OTRA VENTANA");
+                                try {
+                                    extraerDescriptor(null);
+                                } catch (IOException ex) {
+                                    Logger.getLogger(HomeControlador.class.getName()).log(Level.SEVERE, null, ex);
+                                }
                             }
                         });
                         // Add MenuItem to ContextMenu
@@ -256,11 +280,15 @@ public class HomeControlador implements Initializable{
                                         abrirImagenActual();
                                     }
                                 });
-                                MenuItem item2 = new MenuItem("Extraer descriptor...");
+                                MenuItem item2 = new MenuItem("Descriptores");
                                 item2.setOnAction(new EventHandler<ActionEvent>() {
                                     @Override
                                     public void handle(ActionEvent event) {
-                                        System.out.println("NO IMPLEMENTADO, DEBE IR A OTRA VENTANA");
+                                        try {
+                                            extraerDescriptor(null);
+                                        } catch (IOException ex) {
+                                            Logger.getLogger(HomeControlador.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
                                     }
                                 });
                                 // Add MenuItem to ContextMenu
@@ -308,8 +336,12 @@ public class HomeControlador implements Initializable{
                                         System.out.println("Clickao en mi");
                                         if(imagenSeleccionada != null){
                                             extraerCor.setDisable(false);
+                                            descriptorItem.setDisable(false);
+                                            borrarItem2.setDisable(false);
                                         }else{
                                             extraerCor.setDisable(true);
+                                            descriptorItem.setDisable(true);
+                                            borrarItem2.setDisable(true);
                                         }
                                         
                                         if(event.getButton().equals(MouseButton.PRIMARY)){
@@ -348,8 +380,12 @@ public class HomeControlador implements Initializable{
                                 System.out.println("Clickao en mi");
                                 if(imagenSeleccionada != null){
                                     extraerCor.setDisable(false);
+                                    descriptorItem.setDisable(false);
+                                    borrarItem2.setDisable(false);
                                 }else{
                                     extraerCor.setDisable(true);
+                                    descriptorItem.setDisable(true);
+                                    borrarItem2.setDisable(true);
                                 }
                                 
                                 if(event.getButton().equals(MouseButton.PRIMARY)){
@@ -376,89 +412,6 @@ public class HomeControlador implements Initializable{
       }
         );
     }
-   
-    /*
-    @FXML
-    public void establecerPathPorDefecto(ActionEvent event){
-        //FileChooser fileChooser = new FileChooser();
-        //fileChooser.setTitle("Selección de carpeta destino");
-        //fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        //File file = fileChooser.showOpenDialog(stage);
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        File file = directoryChooser.showDialog(stage);
-        if(file != null){
-            //Comprobar permisos antes de nada
-            if(file.canWrite() && file.canRead()){
-                modelo.setPath(file.getAbsolutePath());
-                modelo.guardarConfig();
-                System.out.println(file.getAbsolutePath());
-            }else{
-                //Mostrar aviso de permisos incorrectos, no modificar el path
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Permisos inválidos");
-                alert.setHeaderText(null);
-                alert.setContentText("La carpeta seleccionada no se puede utilizar a falta de permisos de lectura y escritura");
-                alert.showAndWait();
-            }
-        }
-    }
-  */  
-    /*
-    @FXML
-    public void resetearPath(ActionEvent event){
-        modelo.setPath(null);
-        modelo.guardarConfig();
-    }
-*/
-    /*
-    @FXML
-    public void crearWorkspace(ActionEvent event){
-        //Comprobar que el nombre no esté repetido y que no esté en blanco el campo y que contenga como mucho _   
-        Pattern pattern = Pattern.compile("[a-z0-9_]+", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(nombre.getText());
-        boolean valido = matcher.find();
-        
-        if(valido && !(nombre.getText().equals("Workspaces"))){
-            if(!modelo.existeWorkspace(nombre.getText())){
-                System.out.println("Funciono!");
-                //Creación de nuevo Workspace
-                    //workspaces.add(new Workspace(nombre.getText()));
-                    Workspace nuevoWorkspace = modelo.crearWorkspace(nombre.getText());
-                    wsTree.getRoot().getChildren().add(new TreeItem(nuevoWorkspace.getNombre()));
-                //Selector de archivos
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Selección de imágenes");
-                fileChooser.getExtensionFilters().addAll(
-                        new FileChooser.ExtensionFilter("Todo", "*.*"),
-                        new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                        new FileChooser.ExtensionFilter("PNG", "*.png"),
-                        new FileChooser.ExtensionFilter("BMP", "*.bmp"),
-                        new FileChooser.ExtensionFilter("TIF", "*.tif")
-                        
-                );
-                List<File> list = fileChooser.showOpenMultipleDialog(stage);
-
-                if (list != null){
-                    for (File file : list){
-                        openFile(file, nuevoWorkspace);
-                    }
-                }
-            }else{
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Workspace existente");
-                alert.setHeaderText(null);
-                alert.setContentText("El nombre del Workspace introducido ya está en uso");
-                alert.showAndWait();
-            }
-        }else{
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Nombre inválido");
-            alert.setHeaderText(null);
-            alert.setContentText("El nombre del Workspace debe contener únicamente letras y/o números");
-            alert.showAndWait();
-        }
-    }
-    */
  
     
     @FXML
@@ -482,6 +435,33 @@ public class HomeControlador implements Initializable{
                     abierto.setCarpeta(file);
                     abierto.detectarImagenes();
                     wsTree.getRoot().getChildren().add(new TreeItem(abierto.getNombre()));
+                    //Si hay error de apertura en imagenes mostrarlo:
+                    if(abierto.getImagenesErroneas() != null){
+                        String mensajeError ="";
+                        for(int i=0; i<abierto.getImagenesErroneas().size(); i++){
+                            mensajeError=mensajeError+abierto.getImagenesErroneas().get(i)+"\n";
+                        }
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Error al cargar imágenes");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Una o más imágenes no se pudieron cargar. Comprueba que los formatos estén soportados.");
+                        TextArea textArea = new TextArea(mensajeError);
+                        textArea.setEditable(false);
+                        textArea.setWrapText(true);
+                        Label label = new Label("Las imagenes que fallaron en cargar son:");
+                        textArea.setMaxWidth(Double.MAX_VALUE);
+                        textArea.setMaxHeight(Double.MAX_VALUE);
+                        GridPane.setVgrow(textArea, Priority.ALWAYS);
+                        GridPane.setHgrow(textArea, Priority.ALWAYS);
+                        GridPane expContent = new GridPane();
+                        expContent.setMaxWidth(Double.MAX_VALUE);
+                        expContent.add(label, 0, 0);
+                        expContent.add(textArea, 0, 1);
+                        alert.getDialogPane().setExpandableContent(expContent);
+                        alert.showAndWait();
+                        abierto.setImagenesErroneas(null);
+                    }
+                    
                 }
                 System.out.println(file.getAbsolutePath());
             }else{
@@ -520,8 +500,8 @@ public class HomeControlador implements Initializable{
                         new FileChooser.ExtensionFilter("Todo", "*.*"),
                         new FileChooser.ExtensionFilter("JPG", "*.jpg"),
                         new FileChooser.ExtensionFilter("PNG", "*.png"),
-                        new FileChooser.ExtensionFilter("BMP", "*.bmp"),
-                        new FileChooser.ExtensionFilter("TIF", "*.tif")
+                        new FileChooser.ExtensionFilter("BMP", "*.bmp")
+                        //new FileChooser.ExtensionFilter("TIF", "*.tif")
                         
                 );
                 List<File> list = fileChooser.showOpenMultipleDialog(stage);
@@ -529,6 +509,32 @@ public class HomeControlador implements Initializable{
                 if (list != null){
                     for (File file : list){
                         openFile(file, seleccion);
+                    }
+                    if(seleccion.getImagenesErroneas() != null){
+                        System.out.println("Lanzando error de imagenes incorrectas en anhadirImagen()");
+                        String mensajeError ="";
+                        for(int i=0; i<seleccion.getImagenesErroneas().size(); i++){
+                            mensajeError=mensajeError+seleccion.getImagenesErroneas().get(i)+"\n";
+                        }
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Error al cargar imágenes");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Una o más imágenes no se pudieron cargar. Comprueba que los formatos estén soportados.");
+                        TextArea textArea = new TextArea(mensajeError);
+                        textArea.setEditable(false);
+                        textArea.setWrapText(true);
+                        Label label = new Label("Las imagenes que fallaron en cargar son:");
+                        textArea.setMaxWidth(Double.MAX_VALUE);
+                        textArea.setMaxHeight(Double.MAX_VALUE);
+                        GridPane.setVgrow(textArea, Priority.ALWAYS);
+                        GridPane.setHgrow(textArea, Priority.ALWAYS);
+                        GridPane expContent = new GridPane();
+                        expContent.setMaxWidth(Double.MAX_VALUE);
+                        expContent.add(label, 0, 0);
+                        expContent.add(textArea, 0, 1);
+                        alert.getDialogPane().setExpandableContent(expContent);
+                        alert.showAndWait();
+                        seleccion.setImagenesErroneas(null);
                     }
                 }
     }
@@ -581,30 +587,16 @@ public class HomeControlador implements Initializable{
             alert.setContentText("Debe haber 2 o más imágenes en el workspace para realizar una comparación");
             alert.showAndWait();
         }
-        /*
-        if(seleccion.getImagenes().size() > 2){
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Selección de imagen de referencia");
-            fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Todo", "*.*"),
-                    new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                    new FileChooser.ExtensionFilter("PNG", "*.png"),
-                    new FileChooser.ExtensionFilter("BMP", "*.bmp"),
-                    new FileChooser.ExtensionFilter("TIF", "*.tif")
 
-            );
-            File referencia = fileChooser.showOpenDialog(stage);
-            if(referencia != null){
-                seleccion.compararCoocurrencia(referencia);
-            }
-        }else{
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Imágenes insuficientes");
-            alert.setHeaderText(null);
-            alert.setContentText("Debe haber 2 o más imágenes en el workspace para realizar una comparación");
-            alert.showAndWait();
+    }
+    
+    @FXML 
+    public void explorador(ActionEvent event){
+        try {
+            Runtime.getRuntime().exec("explorer.exe /select," + seleccion.getPath());
+        } catch (IOException ex) {
+            Logger.getLogger(HomeControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
-*/
     }
     
     //Abre la versión completa de la imagen seleccionada actualmente

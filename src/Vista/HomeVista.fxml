@@ -31,18 +31,19 @@
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#nuevoWorkspace" text="Nuevo Workspace..." />
                         <MenuItem mnemonicParsing="false" onAction="#abrirWorkspace" text="Abrir Workspace..." />
-                        <MenuItem disable="true" mnemonicParsing="false" text="Cerrar Workspace" />
-                        <MenuItem disable="true" mnemonicParsing="false" text="Borrar Workspace" />
+                        <MenuItem fx:id="cerrarItem" disable="true" mnemonicParsing="false" text="Cerrar Workspace" />
+                        <MenuItem fx:id="borrarItem" disable="true" mnemonicParsing="false" text="Borrar Workspace" />
                         <MenuItem mnemonicParsing="false" onAction="#ajustes" text="Configuración..." />
                         <MenuItem mnemonicParsing="false" onAction="#salir" text="Salir" />
                   </items>
                 </Menu>
-                <Menu disable="true" mnemonicParsing="false" text="Workspace">
+                <Menu fx:id="wsMenu" disable="true" mnemonicParsing="false" text="Workspace">
                   <items>
                     <MenuItem mnemonicParsing="false" text="Añadir imagenes..." />
-                        <MenuItem mnemonicParsing="false" text="Borrar imagen" />
-                        <MenuItem mnemonicParsing="false" text="Descriptores..." />
+                        <MenuItem fx:id="borrarItem2" disable="true" mnemonicParsing="false" text="Borrar imagen" />
+                        <MenuItem fx:id="descriptorItem" disable="true" mnemonicParsing="false" text="Descriptores..." />
                         <MenuItem mnemonicParsing="false" text="Realizar Comparativa..." />
+                        <MenuItem mnemonicParsing="false" onAction="#explorador" text="Mostrar en Explorador..." />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Ayuda">

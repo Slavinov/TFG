@@ -23,9 +23,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -109,6 +114,31 @@ public class NuevoWorkspaceController implements Initializable {
                         for (File file : list){
                             openFile(file, nuevoWorkspace);
                         }
+                        if(nuevoWorkspace.getImagenesErroneas() != null){
+                        String mensajeError ="";
+                        for(int i=0; i<nuevoWorkspace.getImagenesErroneas().size(); i++){
+                            mensajeError=mensajeError+nuevoWorkspace.getImagenesErroneas().get(i)+"\n";
+                        }
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Error al cargar imágenes");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Una o más imágenes no se pudieron cargar. Comprueba que los formatos estén soportados.");
+                        TextArea textArea = new TextArea(mensajeError);
+                        textArea.setEditable(false);
+                        textArea.setWrapText(true);
+                        Label label = new Label("Las imagenes que fallaron en cargar son:");
+                        textArea.setMaxWidth(Double.MAX_VALUE);
+                        textArea.setMaxHeight(Double.MAX_VALUE);
+                        GridPane.setVgrow(textArea, Priority.ALWAYS);
+                        GridPane.setHgrow(textArea, Priority.ALWAYS);
+                        GridPane expContent = new GridPane();
+                        expContent.setMaxWidth(Double.MAX_VALUE);
+                        expContent.add(label, 0, 0);
+                        expContent.add(textArea, 0, 1);
+                        alert.getDialogPane().setExpandableContent(expContent);
+                        alert.showAndWait();
+                        nuevoWorkspace.setImagenesErroneas(null);
+                    }
                     }
                     stage.close();
                 }              

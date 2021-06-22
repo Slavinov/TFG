@@ -48,7 +48,7 @@
                   <TextField fx:id="path" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="34.0" prefWidth="368.0" />
                </content>
             </ScrollPane>
-            <Label text="Path por defecto:" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Path por defecto para workspaces:" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <children>
                   <Button layoutX="196.0" layoutY="4.0" mnemonicParsing="false" onAction="#modifyPath" text="Modificar" />
