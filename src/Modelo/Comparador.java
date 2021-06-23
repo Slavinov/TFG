@@ -91,6 +91,8 @@ public class Comparador {
         return resultado;
     }
     
+    //Distáncia euclída
+    /* 
     //funcion para calcular distancia euclídea entre dos vectores
     public static float ndistance(float[] a, float[] b) {
         float total = 0, diff;
@@ -100,4 +102,14 @@ public class Comparador {
         }
         return (float) Math.abs(Math.sqrt(total));
     }
+    */
+    
+    //Distancia Canberra
+    public static float ndistance(float[] v1,float[] v2){
+		float sum = 0;
+		for(int i=0;i<v1.length;i++){
+			sum += Math.abs(v1[i]-v2[i])/(Math.abs(v1[i])+Math.abs(v2[i])); //Ojo ceros
+		}
+		return sum;
+	}
 }

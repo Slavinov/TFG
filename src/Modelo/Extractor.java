@@ -73,7 +73,7 @@ public class Extractor {
         resultado.setInertia(res.inertia);
         
         System.out.println("Descriptor obtenido con éxito!" + resultado.getEnergy()[4]); //Debe dar 0.32708114 para car.bmp
-       
+        System.out.println("Descriptor obtenido con éxito!" + resultado.getInertia()[2]);
         return resultado;
     }
     

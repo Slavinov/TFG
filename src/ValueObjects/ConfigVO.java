@@ -6,8 +6,8 @@ package ValueObjects;
  */
 
 public class ConfigVO {
-    private String defaultPath;
-    private int distancia;
+    private String defaultPath = null;
+    private int distancia = 1;
     
     public ConfigVO(){
         

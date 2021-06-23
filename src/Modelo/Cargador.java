@@ -47,26 +47,36 @@ public class Cargador {
                     int r = (rgb >> 16) & 0xFF;
                     int g = (rgb >> 8) & 0xFF;
                     int b = (rgb & 0xFF);
+                    //PREPROCESAMIENTO?¿
                     //int gray = (r + g + b) / 3; 
                     // Normalización y corrección de gamma:
-                    float rr = (float) Math.pow(r / 255.0, 2.2);
-                    float gg = (float) Math.pow(g / 255.0, 2.2);
-                    float bb = (float) Math.pow(b / 255.0, 2.2);
+                    //float rr = (float) Math.pow(r / 255.0, 2.2);
+                    //float gg = (float) Math.pow(g / 255.0, 2.2);
+                    //float bb = (float) Math.pow(b / 255.0, 2.2);
 
                     // Cálculo de luminancia:
-                    float lum = (float) (0.2126 * rr + 0.7152 * gg + 0.0722 * bb);
+                    //float lum = (int) (0.2126 * rr + 0.7152 * gg + 0.0722 * bb);
+                    int gray = (int) (0.2126 * r + 0.7152 * g + 0.0722 * b);
 
                     // Gamma compand and rescale to byte range:
-                    int grayLevel = (int) (255.0 * Math.pow(lum, 1.0 / 2.2));
-                    int gray = (grayLevel << 16) + (grayLevel << 8) + grayLevel;
+                    //int grayLevel = (int) (255.0 * Math.pow(lum, 1.0 / 2.2));
+                    //int gray = (grayLevel << 16) + (grayLevel << 8) + grayLevel;
+                    //if(entrada.getName().equals("Ca.PNG")){
+                      //  System.out.println("jajajajajaja:" +gray);
+                   // }
                     pix[i][j] = gray;
-                    
-                    //if(entrada.getName().equals("igor-bogdanov.jpg")){
-                      //  gris.setRGB(j, i, gray);
-                    //}
                 }else if(color.getPixelSize() == 8){ //Escala de grises
                     int gray = img.getRGB(j, i)& 0xFF;
                     pix[i][j] = gray;
+                    //if(entrada.getName().equals("test2.jpg")){
+                      //  System.out.println("i="+i+" j="+j+" res: " +gray);
+                    //}
+                    //if(entrada.getName().equals("test2Gir.jpg")){
+                      //  System.out.println("Gir i="+i+" j="+j+" res: " +gray);
+                   // }
+                    //if(entrada.getName().equals("test2Reves.jpg")){
+                      //  System.out.println("Reves i="+i+" j="+j+" res: " +gray);
+                    //}
                 }else{//Profundidad de pixel no soportada
                     return null;
                 }
