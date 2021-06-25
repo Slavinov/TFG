@@ -16,3 +16,18 @@
 .item:selected{
     -fx-background-color:azure;
 }
+
+.buttonBajar{
+    -fx-border-width:0;
+    -fx-background-color : transparent;
+}
+
+.buttonBajar:hover{
+    -fx-border-width:1;
+    -fx-background-color:#2699ab;
+}
+
+.buttonBajar:selected{
+    -fx-border-width:0;
+    -fx-background-color:#2699ab;
+}

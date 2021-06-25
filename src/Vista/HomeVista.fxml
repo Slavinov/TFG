@@ -19,10 +19,10 @@
         </columnConstraints>
         <rowConstraints>
           <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="25.0" valignment="TOP" vgrow="NEVER" />
-            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="34.0" valignment="TOP" vgrow="NEVER" />
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="34.0" prefHeight="34.0" valignment="TOP" vgrow="NEVER" />
           <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="485.0" vgrow="ALWAYS" />
             <RowConstraints maxHeight="1.7976931348623157E308" minHeight="3.0" prefHeight="32.0" vgrow="NEVER" />
-          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="19.0" vgrow="NEVER" />
+          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="24.0" vgrow="NEVER" />
         </rowConstraints>
          <children>
             <MenuBar GridPane.columnSpan="2">
@@ -31,18 +31,18 @@
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#nuevoWorkspace" text="Nuevo Workspace..." />
                         <MenuItem mnemonicParsing="false" onAction="#abrirWorkspace" text="Abrir Workspace..." />
-                        <MenuItem fx:id="cerrarItem" disable="true" mnemonicParsing="false" text="Cerrar Workspace" />
-                        <MenuItem fx:id="borrarItem" disable="true" mnemonicParsing="false" text="Borrar Workspace" />
+                        <MenuItem fx:id="cerrarItem" disable="true" mnemonicParsing="false" onAction="#cerrarWorkspace" text="Cerrar Workspace" />
+                        <MenuItem fx:id="borrarItem" disable="true" mnemonicParsing="false" onAction="#borrarWorkspace" text="Borrar Workspace" />
                         <MenuItem mnemonicParsing="false" onAction="#ajustes" text="Configuración..." />
                         <MenuItem mnemonicParsing="false" onAction="#salir" text="Salir" />
                   </items>
                 </Menu>
                 <Menu fx:id="wsMenu" disable="true" mnemonicParsing="false" text="Workspace">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Añadir imagenes..." />
-                        <MenuItem fx:id="borrarItem2" disable="true" mnemonicParsing="false" text="Borrar imagen" />
-                        <MenuItem fx:id="descriptorItem" disable="true" mnemonicParsing="false" text="Descriptores..." />
-                        <MenuItem mnemonicParsing="false" text="Realizar Comparativa..." />
+                    <MenuItem mnemonicParsing="false" onAction="#anhadirImagen" text="Añadir imagenes..." />
+                        <MenuItem fx:id="borrarItem2" disable="true" mnemonicParsing="false" onAction="#borrarImagen" text="Borrar imagen" />
+                        <MenuItem fx:id="descriptorItem" disable="true" mnemonicParsing="false" onAction="#extraerDescriptor" text="Descriptores..." />
+                        <MenuItem mnemonicParsing="false" onAction="#comparar" text="Realizar Comparativa..." />
                         <MenuItem mnemonicParsing="false" onAction="#explorador" text="Mostrar en Explorador..." />
                   </items>
                 </Menu>
@@ -54,7 +54,6 @@
                 </Menu>
               </menus>
             </MenuBar>
-            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
             <SplitPane dividerPositions="0.2819548872180451" prefHeight="160.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
               <items>
                 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="100.0">
@@ -74,9 +73,23 @@
                   <Button fx:id="compararBtn" disable="true" layoutX="720.0" layoutY="6.0" mnemonicParsing="false" onAction="#comparar" text="Comparar" AnchorPane.rightAnchor="11.0" />
                   <Button fx:id="extraerCor" disable="true" layoutX="638.0" layoutY="6.0" mnemonicParsing="false" onAction="#extraerDescriptor" text="Descriptores" AnchorPane.rightAnchor="101.0" />
                   <Button fx:id="addImage" disable="true" layoutX="521.0" layoutY="6.0" mnemonicParsing="false" onAction="#anhadirImagen" text="Añadir imagenes" AnchorPane.rightAnchor="202.0" />
-                  <Button layoutX="7.0" layoutY="4.0" mnemonicParsing="false" onAction="#abrirWorkspace" text="A" AnchorPane.leftAnchor="7.0" />
-                  <Button layoutX="31.0" layoutY="4.0" mnemonicParsing="false" onAction="#cerrarWorkspace" text="C" AnchorPane.leftAnchor="30.0" />
-                  <Button layoutX="55.0" layoutY="4.0" mnemonicParsing="false" onAction="#borrarWorkspace" text="B" AnchorPane.leftAnchor="54.0" />
+                  <Button fx:id="subirBtn" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="7.0" layoutY="4.0" mnemonicParsing="false" onAction="#subir" styleClass="buttonBajar" AnchorPane.leftAnchor="4.0" />
+                  <Button fx:id="bajarBtn" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="31.0" layoutY="4.0" mnemonicParsing="false" onAction="#bajar" styleClass="buttonBajar" AnchorPane.leftAnchor="50.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+               <children>
+                  <Button fx:id="i1" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="14.0" layoutY="5.0" mnemonicParsing="false" onAction="#nuevoWorkspace" styleClass="buttonBajar" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="0.0" />
+                  <Button fx:id="i7" contentDisplay="CENTER" disable="true" graphicTextGap="0.0" layoutX="66.0" layoutY="5.0" mnemonicParsing="false" onAction="#extraerDescriptor" styleClass="buttonBajar" AnchorPane.leftAnchor="329.0" AnchorPane.topAnchor="0.0" />
+                  <Button fx:id="i2" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="118.0" layoutY="5.0" mnemonicParsing="false" onAction="#abrirWorkspace" styleClass="buttonBajar" AnchorPane.leftAnchor="54.0" AnchorPane.topAnchor="0.0" />
+                  <Button fx:id="i3" contentDisplay="CENTER" disable="true" graphicTextGap="0.0" layoutX="170.0" layoutY="5.0" mnemonicParsing="false" onAction="#cerrarWorkspace" styleClass="buttonBajar" AnchorPane.leftAnchor="104.0" AnchorPane.topAnchor="0.0" />
+                  <Separator layoutX="233.0" layoutY="3.0" orientation="VERTICAL" prefHeight="34.0" AnchorPane.leftAnchor="204.0" AnchorPane.topAnchor="0.0" />
+                  <Button fx:id="i4" contentDisplay="CENTER" disable="true" graphicTextGap="0.0" layoutX="248.0" layoutY="6.0" mnemonicParsing="false" onAction="#borrarWorkspace" styleClass="buttonBajar" AnchorPane.leftAnchor="154.0" AnchorPane.topAnchor="0.0" />
+                  <Button fx:id="i5" contentDisplay="CENTER" disable="true" graphicTextGap="0.0" layoutX="300.0" layoutY="5.0" mnemonicParsing="false" onAction="#anhadirImagen" styleClass="buttonBajar" AnchorPane.leftAnchor="229.0" AnchorPane.topAnchor="0.0" />
+                  <Button fx:id="i6" contentDisplay="CENTER" disable="true" graphicTextGap="0.0" layoutX="352.0" layoutY="6.0" mnemonicParsing="false" onAction="#borrarImagen" styleClass="buttonBajar" AnchorPane.leftAnchor="279.0" AnchorPane.topAnchor="0.0" />
+                  <Button fx:id="i8" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="440.0" layoutY="6.0" mnemonicParsing="false" onAction="#ajustes" styleClass="buttonBajar" AnchorPane.leftAnchor="404.0" AnchorPane.topAnchor="0.0" />
+                  <Separator layoutX="419.0" layoutY="8.0" orientation="VERTICAL" prefHeight="34.0" AnchorPane.leftAnchor="379.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
          </children>

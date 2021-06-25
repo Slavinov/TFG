@@ -281,6 +281,39 @@ public class Workspace {
         
     }
     
+    //borra la imagen dada del workspace y del sistema de archivos
+    public void borrarImagen(String nombre){
+        Imagen  objetivo = null;
+        for(int i=0; i<this.imagenes.size(); i++){
+            if(this.imagenes.get(i).getNombre().equals(nombre)){
+                objetivo = this.imagenes.get(i);
+            }
+        }
+        
+        if(objetivo != null){
+            //Se eliminan los descriptores si los hay
+            for(int i = 0; i < objetivo.getDescriptores().size(); i++){               
+                File file = new File(objetivo.getDescriptores().get(i).getCarpetaDescriptor().getAbsolutePath()+"\\"+objetivo.getNombre()+".txt");   
+                try {
+                    Files.deleteIfExists(file.toPath());
+                } catch (IOException ex) {
+                    Logger.getLogger(Workspace.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+            //Se elimina la propia imagen
+            File file2 = new File(this.path+"\\"+objetivo.getNombre());
+            try {
+                    Files.deleteIfExists(file2.toPath());
+                } catch (IOException ex) {
+                    Logger.getLogger(Workspace.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            //Se elimina del arraylist
+            this.imagenes.remove(objetivo);
+            
+        }
+    }
+    
     public void compararLaws(File referencia){
         
     }

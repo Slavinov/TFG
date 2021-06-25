@@ -32,15 +32,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
@@ -71,6 +74,7 @@ public class HomeControlador implements Initializable{
     private String imagenSeleccionada; //Nombre de la imagen seleccionada en el workspace
     private Label itemSeleccionado = null;
     private int maxCol = 2;
+    private String entradaWsTreeSeleccionada = null;
     //Atributos de elementos de JavaFX
     @FXML
     private TextField nombre;
@@ -88,7 +92,26 @@ public class HomeControlador implements Initializable{
     private Button extraerCor;
     @FXML 
     private Button compararBtn;
-    
+    @FXML
+    private Button subirBtn;
+    @FXML
+    private Button bajarBtn;
+    @FXML
+    private Button i1;
+    @FXML
+    private Button i2;
+    @FXML
+    private Button i3;
+    @FXML
+    private Button i4;
+    @FXML
+    private Button i5;
+    @FXML
+    private Button i6;
+    @FXML
+    private Button i7;
+    @FXML
+    private Button i8;
     @FXML
     private ScrollPane scrollPane;
     @FXML
@@ -115,10 +138,60 @@ public class HomeControlador implements Initializable{
     //Init
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //Cargar datos
+        //Cargar datos del modelo
         modelo = new FachadaModelo();
         modelo.init();
-        //Establecer el path inicial?
+        //Inicialización de interfaz
+        ImageView img = new ImageView("iconos/arrow-up.png");
+        img.setFitHeight(25);
+        img.setFitWidth(25);
+        subirBtn.setGraphic(img);
+        subirBtn.setTooltip(new Tooltip("Workspace Anterior"));
+        img = new ImageView("iconos/arrow-down.png");
+        img.setFitHeight(25);
+        img.setFitWidth(25);
+        bajarBtn.setGraphic(img);
+        bajarBtn.setTooltip(new Tooltip("Siguiente Workspace"));
+        img = new ImageView("iconos/folder-add-icon.png");
+        img.setFitHeight(25);
+        img.setFitWidth(25);
+        i1.setGraphic(img);
+        i1.setTooltip(new Tooltip("Crear workspcae nuevo"));
+        img = new ImageView("iconos/folder-icon.png");
+        img.setFitHeight(25);
+        img.setFitWidth(25);
+        i2.setGraphic(img);
+        i2.setTooltip(new Tooltip("Abrir workspace existente"));
+        img = new ImageView("iconos/folder-remove-icon.png");
+        img.setFitHeight(25);
+        img.setFitWidth(25);
+        i3.setGraphic(img);
+        i3.setTooltip(new Tooltip("Cerrar workspace seleccionado"));
+        img = new ImageView("iconos/folder-delete-icon.png");
+        img.setFitHeight(25);
+        img.setFitWidth(25);
+        i4.setGraphic(img);
+        i4.setTooltip(new Tooltip("Borrar workspace seleccionado"));
+        img = new ImageView("iconos/document-add-icon.png");
+        img.setFitHeight(25);
+        img.setFitWidth(25);
+        i5.setGraphic(img);
+        i5.setTooltip(new Tooltip("Añadir imágenes al workspace actual"));
+        img = new ImageView("iconos/document-delete-icon.png");
+        img.setFitHeight(25);
+        img.setFitWidth(25);
+        i6.setGraphic(img);
+        i6.setTooltip(new Tooltip("Borrar imagen seleccionada"));
+        img = new ImageView("iconos/document-write-icon.png");
+        img.setFitHeight(25);
+        img.setFitWidth(25);
+        i7.setGraphic(img);
+        i7.setTooltip(new Tooltip("Mostrar descriptores de la imagen seleccionada"));
+        img = new ImageView("iconos/document-settings-icon.png");
+        img.setFitHeight(25);
+        img.setFitWidth(25);
+        i8.setGraphic(img);
+        i8.setTooltip(new Tooltip("Abrir la ventana de ajustes"));
         
         //Actualizar la vista con los workspaces cargados
         TreeItem rootItem = new TreeItem("Workspaces");
@@ -141,22 +214,20 @@ public class HomeControlador implements Initializable{
                 System.out.println("Selected Text : " + selectedItem.getValue());
                 if(!selectedItem.getValue().equals("Workspaces")){
                     System.out.println("Cambiando de seleccion");
+                    imagenSeleccionada = null;
                     extraerCor.setDisable(true);
+                    i7.setDisable(true);
                     descriptorItem.setDisable(true);
                     borrarItem2.setDisable(true);
-                    //Se cambia el workspace seleccionado, cargando las imágenes y todo eso
-                    if(seleccion != null){
-                        if(seleccion.getNombre() != selectedItem.getValue()){
-                            extraerCor.setDisable(true);
-                            
-                            
-                        }
-                    }
+                    i6.setDisable(true);
                     seleccion = modelo.obtenerWorkspace(selectedItem.getValue());
                     if(seleccion != null){
                         borrarItem.setDisable(false);
                         cerrarItem.setDisable(false);
+                        i3.setDisable(false);
+                        i4.setDisable(false);
                         addImage.setDisable(false);
+                        i5.setDisable(false);
                         compararBtn.setDisable(false);
                         wsMenu.setDisable(false);
                     
@@ -210,8 +281,15 @@ public class HomeControlador implements Initializable{
                                 }
                             }
                         });
+                        MenuItem item3 = new MenuItem("Borrar imagen");
+                        item3.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent event) {                               
+                                borrarImagen(null);                                
+                            }
+                        });
                         // Add MenuItem to ContextMenu
-                        contextMenu.getItems().addAll(item1, item2);
+                        contextMenu.getItems().addAll(item1, item2, item3);
                         temp.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
  
                             @Override
@@ -258,7 +336,7 @@ public class HomeControlador implements Initializable{
                                 entrada.setPadding(new Insets(15, 5, 15, 5));
                                 Label temp = new Label(seleccion.getImagenes().get(i).getNombre());
                                 if(seleccion.getImagenes().get(i).getNombre().equals(nombreItemSeleccionado)){
-                                    temp.setStyle("-fx-background-color: blue;");
+                                    temp.setStyle("-fx-background-color: #2699ab;");
                                     itemSeleccionado = temp;
                                 }
                                 temp.setMaxWidth(120.0);
@@ -291,8 +369,15 @@ public class HomeControlador implements Initializable{
                                         }
                                     }
                                 });
+                                MenuItem item3 = new MenuItem("Borrar imagen");
+                                item3.setOnAction(new EventHandler<ActionEvent>() {
+                                    @Override
+                                    public void handle(ActionEvent event) {                               
+                                        borrarImagen(null);                                
+                                    }
+                                });
                                 // Add MenuItem to ContextMenu
-                                contextMenu.getItems().addAll(item1, item2);
+                                contextMenu.getItems().addAll(item1, item2, item3);
                                 temp.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
 
                                     @Override
@@ -330,18 +415,22 @@ public class HomeControlador implements Initializable{
                                             
                                             //Selección del label con css
                                             itemSeleccionado = temp2;
-                                            itemSeleccionado.setStyle("-fx-background-color: blue;");
+                                            itemSeleccionado.setStyle("-fx-background-color: #2699ab;");
                                             
                                         }
                                         System.out.println("Clickao en mi");
                                         if(imagenSeleccionada != null){
                                             extraerCor.setDisable(false);
+                                            i7.setDisable(false);
                                             descriptorItem.setDisable(false);
                                             borrarItem2.setDisable(false);
+                                            i6.setDisable(false);
                                         }else{
                                             extraerCor.setDisable(true);
                                             descriptorItem.setDisable(true);
                                             borrarItem2.setDisable(true);
+                                            i6.setDisable(true);
+                                            i7.setDisable(true);
                                         }
                                         
                                         if(event.getButton().equals(MouseButton.PRIMARY)){
@@ -375,17 +464,21 @@ public class HomeControlador implements Initializable{
                                     
                                     //Selección del label con css
                                     itemSeleccionado = temp2;
-                                    itemSeleccionado.setStyle("-fx-background-color: blue;");
+                                    itemSeleccionado.setStyle("-fx-background-color: #2699ab;");
                                 }
                                 System.out.println("Clickao en mi");
                                 if(imagenSeleccionada != null){
                                     extraerCor.setDisable(false);
                                     descriptorItem.setDisable(false);
                                     borrarItem2.setDisable(false);
+                                    i6.setDisable(false);
+                                    i7.setDisable(false);
                                 }else{
                                     extraerCor.setDisable(true);
                                     descriptorItem.setDisable(true);
                                     borrarItem2.setDisable(true);
+                                    i6.setDisable(true);
+                                    i7.setDisable(true);
                                 }
                                 
                                 if(event.getButton().equals(MouseButton.PRIMARY)){
@@ -405,6 +498,17 @@ public class HomeControlador implements Initializable{
                     if(seleccion == null){
                         addImage.setDisable(true);
                         compararBtn.setDisable(true);
+                        extraerCor.setDisable(true);
+                        i7.setDisable(true);
+                        descriptorItem.setDisable(true);
+                        borrarItem2.setDisable(true);
+                        i6.setDisable(true);
+                        borrarItem.setDisable(true);
+                        cerrarItem.setDisable(true);
+                        i3.setDisable(true);
+                        i4.setDisable(true);                       
+                        i5.setDisable(true);                       
+                        wsMenu.setDisable(true);                  
                     }
                 }
             }
@@ -479,17 +583,67 @@ public class HomeControlador implements Initializable{
     @FXML
     public void cerrarWorkspace(ActionEvent event){ //Simplemente borrarlo de la base de datos y del tree
         System.out.println("Cerrar workspace");
-        if(wsTree.getSelectionModel().getSelectedItem() != null){
-            TreeItem entrada = (TreeItem) wsTree.getSelectionModel().getSelectedItem();
-            System.out.println("Nombre del nodo: " + entrada.getValue().toString());
-            modelo.cerrarWorkspace(entrada.getValue().toString());
-            entrada.getParent().getChildren().remove(entrada);         
+        if(seleccion != null){
+            TreeItem entrada = null;
+            TreeItem entrada2 = null;
+            for(int i= 0; i< wsTree.getRoot().getChildren().size(); i++){
+                entrada = (TreeItem) wsTree.getRoot().getChildren().get(i);
+                if(entrada.getValue().equals(seleccion.getNombre())){                    
+                    entrada2 = entrada;
+                }
+            }
+            if(entrada2 != null){
+                modelo.cerrarWorkspace(seleccion.getNombre());           
+                //Borrar la entrada del árbol
+                entrada.getParent().getChildren().remove(entrada); 
+            }        
+        }
+    }
+    
+    @FXML
+    public void borrarImagen(ActionEvent event){
+        Alert alert = new Alert(AlertType.CONFIRMATION, "Borrar " + imagenSeleccionada + " permanentemente?", ButtonType.YES, ButtonType.NO);
+        alert.showAndWait();
+        if((imagenSeleccionada != null) && (seleccion != null) && (alert.getResult() == ButtonType.YES)){
+            seleccion.borrarImagen(imagenSeleccionada);
+            //Hack de la actualización de vista
+            MultipleSelectionModel msm = wsTree.getSelectionModel();
+            TreeItem temp1 = wsTree.getRoot();
+            TreeItem temp2 = null;
+            msm.select(temp1);
+            for(int i=0; i<wsTree.getRoot().getChildren().size(); i++){
+                temp1 = (TreeItem) wsTree.getRoot().getChildren().get(i);
+                if(temp1.getValue().equals(seleccion.getNombre())){
+                    temp2 = temp1;
+                    System.out.println("Reseleccionando!");
+                }
+            }
+            if(temp2 != null){
+                msm.select(temp2);
+            }
         }
     }
     
     @FXML 
     public void borrarWorkspace(ActionEvent event){ //Borrarlo de la base de datos y también el archivo de texto invisible que viene en la carpeta
+        Alert alert = new Alert(AlertType.CONFIRMATION, "Borrar " + seleccion.getNombre() + " permanentemente (se perderán todas las imágenes y descriptores del workspace)?", ButtonType.YES, ButtonType.NO);
+        alert.showAndWait();
         System.out.println("Borrar workspace");
+        if((seleccion != null) && (alert.getResult() == ButtonType.YES)){
+            TreeItem entrada = null;
+            TreeItem entrada2 = null;
+            for(int i= 0; i< wsTree.getRoot().getChildren().size(); i++){
+                entrada = (TreeItem) wsTree.getRoot().getChildren().get(i);
+                if(entrada.getValue().equals(seleccion.getNombre())){                    
+                    entrada2 = entrada;
+                }
+            }
+            if(entrada2 != null){
+                modelo.borrarWorkspace(seleccion.getNombre());           
+                //Borrar la entrada del árbol
+                entrada.getParent().getChildren().remove(entrada); 
+            }
+        }
     }
     
     //Añadir imágenes a un workspace seleccionado
@@ -509,6 +663,23 @@ public class HomeControlador implements Initializable{
                 if (list != null){
                     for (File file : list){
                         openFile(file, seleccion);
+                    }
+                    //Pequeño hack para la Actualización del treeView, se selecciona el nodo raíz y luego de vuelta el workspace anterior 
+                    if(seleccion != null){
+                        MultipleSelectionModel msm = wsTree.getSelectionModel();
+                        TreeItem temp1 = wsTree.getRoot();
+                        TreeItem temp2 = null;
+                        msm.select(temp1);
+                        for(int i=0; i<wsTree.getRoot().getChildren().size(); i++){
+                            temp1 = (TreeItem) wsTree.getRoot().getChildren().get(i);
+                            if(temp1.getValue().equals(seleccion.getNombre())){
+                                temp2 = temp1;
+                                System.out.println("Reseleccionando!");
+                            }
+                        }
+                        if(temp2 != null){
+                            msm.select(temp2);
+                        }
                     }
                     if(seleccion.getImagenesErroneas() != null){
                         System.out.println("Lanzando error de imagenes incorrectas en anhadirImagen()");
@@ -560,6 +731,30 @@ public class HomeControlador implements Initializable{
         }
     }
     
+    
+    @FXML public void subir(){
+        TreeItem root = wsTree.getRoot();
+        root.setExpanded(true);
+        int index = wsTree.getSelectionModel().getSelectedIndex();
+        if(index > 0){
+            index = index-1;
+        }else{
+            index = modelo.getWorkspaces().size();
+        }
+        wsTree.getSelectionModel().select(index);
+        
+    }
+    @FXML public void bajar(){
+        TreeItem root = wsTree.getRoot();
+        root.setExpanded(true);
+        int index = wsTree.getSelectionModel().getSelectedIndex();
+        if(index < modelo.getWorkspaces().size()){
+            index = index+1;
+        }else{
+            index = 0;
+        }
+        wsTree.getSelectionModel().select(index);
+    }
     
     @FXML 
     public void comparar(ActionEvent event) throws IOException{
@@ -649,7 +844,7 @@ public class HomeControlador implements Initializable{
             Parent root = (Parent)loader.load();
             ExtraccionController controller = (ExtraccionController)loader.getController();
             Stage stageLocal = new Stage();
-            stageLocal.initModality(Modality.APPLICATION_MODAL);
+            //stageLocal.initModality(Modality.APPLICATION_MODAL);
             stageLocal.initOwner(stage);
             stageLocal.setTitle("Descriptores de " + imagenSeleccionada);
             //stageLocal.setResizable(false); //Evitar que se pueda cambiar de tam

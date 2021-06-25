@@ -4,7 +4,11 @@ import DataAccess.FachadaDAO;
 import ValueObjects.ConfigVO;
 import ValueObjects.WorkspaceVO;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -118,9 +122,41 @@ public class FachadaModelo {
         return resultado;
     }
     
-    public void borrarWorkspace(){
+    //Elimina recursivamente los contenidos del directorio
+    private boolean deleteDirectory(File path) {
+        if( path.exists() ) {
+          File[] files = path.listFiles();
+          for(int i=0; i<files.length; i++) {
+             if(files[i].isDirectory()) {
+               deleteDirectory(files[i]);
+             }
+             else {
+               files[i].delete();
+             }
+          }
+        }
+        return( path.delete() );
+    }
+    public void borrarWorkspace(String nombre){
         //Eliminar todo el contenido del workspace
         //Eliminar su referencia de la BD
+        boolean estado = false;
+        this.baseDatos.borrarWorkspace(nombre);
+        for(int i = 0; i< workspaces.size(); i++){
+            if(workspaces.get(i).getNombre().equals(nombre)){
+                File f = workspaces.get(i).getCarpeta();
+                if(f != null){ 
+                    System.out.println("Borrando todo en la carpeta");
+                    estado = deleteDirectory(f);                  
+                }
+                workspaces.remove(i);
+                break;
+            }
+        }
+        if(estado == true){
+            System.out.println("Todo borrado");
+        }
+        
     }
     
     public Workspace abrirWorkspace(String nombre, String path){
