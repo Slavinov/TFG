@@ -9,14 +9,15 @@ import javafx.scene.image.Image;
  */
 public class Imagen {
     private String nombre;
-    private String formato; //Irrelevante?
-    private ArrayList<Descriptor> descriptores = new ArrayList<Descriptor>(); //Irrelevante?
+    private String formato; //Irrelevante
+    private ArrayList<Descriptor> descriptores = new ArrayList<Descriptor>(); 
     private int[][] valores;
     private int[][] valoresBlancos; //Necesario para crear la máscara
     private int altura;
     private int anchura;
-    private int bandas; //Interesante?
+    private int bandas; 
     private Image miniatura;
+    private float distanciaUltimaComparativa; //Distancia hasta la imagen de referencia obtenida en la última comparativa
     
     
     public Imagen(String n){
@@ -24,6 +25,16 @@ public class Imagen {
     }
     //Almacenar todo (formato,tipo,rows,cols,data(valores de pixeles))? probablemente. Desde Cargador -> extraer valores de pixeles, utilizando diferentes métodos dependiendo del formato quizás 
 
+    public float getDistanciaUltimaComparativa() {
+        return distanciaUltimaComparativa;
+    }
+
+    public void setDistanciaUltimaComparativa(float distanciaUltimaComparativa) {
+        this.distanciaUltimaComparativa = distanciaUltimaComparativa;
+    }
+
+    
+    
     public String getNombre() {
         return nombre;
     }

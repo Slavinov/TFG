@@ -196,7 +196,7 @@ public class FachadaModelo {
         boolean existe = false;
         
         for(int i = 0; i< workspaces.size(); i++){
-            if(workspaces.get(i).equals(nombre)){
+            if(workspaces.get(i).getNombre().equals(nombre)){
                 existe = true;
             }
         }

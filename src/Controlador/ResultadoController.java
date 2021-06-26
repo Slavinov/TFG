@@ -103,6 +103,7 @@ public class ResultadoController implements Initializable {
         ref.setContentDisplay(ContentDisplay.TOP);
         
         res1.setText(sel.getResultadoComparacion().get(0).getNombre());
+        //res1.setText("Mejor coincidencia");
         res1.setMaxWidth(120.0);
         res1.setMinWidth(120.0);
         res1.setWrapText(true);
@@ -113,6 +114,7 @@ public class ResultadoController implements Initializable {
         res1.setContentDisplay(ContentDisplay.TOP);
         
         res2.setText(sel.getResultadoComparacion().get(1).getNombre());
+        //res2.setText("Segunda mejor coincidencia");
         res2.setMaxWidth(120.0);
         res2.setMinWidth(120.0);
         res2.setWrapText(true);
@@ -124,6 +126,7 @@ public class ResultadoController implements Initializable {
         
         if(sel.getResultadoComparacion().size() > 2){
             res3.setText(sel.getResultadoComparacion().get(2).getNombre());
+            //res3.setText("Tercera mejor coincidencia");
             res3.setMaxWidth(120.0);
             res3.setMinWidth(120.0);
             res3.setWrapText(true);
@@ -151,7 +154,7 @@ public class ResultadoController implements Initializable {
 
             Pane entrada = new Pane();
             entrada.setPadding(new Insets(15, 5, 15, 5));
-            Label temp = new Label(sel.getResultadoComparacion().get(i).getNombre());
+            Label temp = new Label(sel.getResultadoComparacion().get(i).getNombre() +" (d="+sel.getResultadoComparacion().get(i).getDistanciaUltimaComparativa()+")");
             temp.setMaxWidth(120.0);
             temp.setMinWidth(120.0);
             temp.setWrapText(true);
@@ -219,7 +222,7 @@ public class ResultadoController implements Initializable {
 
                         //Selección del label con css
                         itemSeleccionado = temp2;
-                        itemSeleccionado.setStyle("-fx-background-color: blue;");
+                        itemSeleccionado.setStyle("-fx-background-color: #2699ab;");
                     }
                     System.out.println("Clickao en mi");
                     if(event.getButton().equals(MouseButton.PRIMARY)){

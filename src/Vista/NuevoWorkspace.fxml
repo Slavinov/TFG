@@ -12,9 +12,9 @@
         <URL value="@nuevoworkspace.css" />
     </stylesheets>
    <children>
-      <TextField fx:id="nombre" layoutX="129.0" layoutY="84.0" />
-      <Button fx:id="crearWorkspace" layoutX="327.0" layoutY="154.0" mnemonicParsing="false" onAction="#crearWorkspace" text="Siguiente" />
-      <Button layoutX="20.0" layoutY="154.0" mnemonicParsing="false" onAction="#cerrarVentana" text="Cancelar" />
-      <Label layoutX="59.0" layoutY="88.0" text="Nombre:" />
+      <TextField fx:id="nombre" layoutX="129.0" layoutY="84.0" AnchorPane.leftAnchor="129.0" AnchorPane.rightAnchor="129.0" />
+      <Button fx:id="crearWorkspace" layoutX="327.0" layoutY="154.0" mnemonicParsing="false" onAction="#crearWorkspace" text="Siguiente" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="14.0" />
+      <Button layoutX="20.0" layoutY="154.0" mnemonicParsing="false" onAction="#cerrarVentana" text="Cancelar" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="14.0" />
+      <Label layoutX="59.0" layoutY="88.0" text="Nombre:" AnchorPane.leftAnchor="59.0" />
    </children>
 </AnchorPane>

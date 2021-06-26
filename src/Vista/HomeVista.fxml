@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.net.*?>
 <?import java.util.*?>
@@ -20,9 +21,9 @@
         <rowConstraints>
           <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="25.0" valignment="TOP" vgrow="NEVER" />
             <RowConstraints maxHeight="1.7976931348623157E308" minHeight="34.0" prefHeight="34.0" valignment="TOP" vgrow="NEVER" />
-          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="485.0" vgrow="ALWAYS" />
-            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="3.0" prefHeight="32.0" vgrow="NEVER" />
-          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="24.0" vgrow="NEVER" />
+          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="481.0" vgrow="ALWAYS" />
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="3.0" prefHeight="40.0" vgrow="NEVER" />
+          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="20.0" vgrow="NEVER" />
         </rowConstraints>
          <children>
             <MenuBar GridPane.columnSpan="2">
@@ -70,14 +71,19 @@
             </SplitPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
                <children>
-                  <Button fx:id="compararBtn" disable="true" layoutX="720.0" layoutY="6.0" mnemonicParsing="false" onAction="#comparar" text="Comparar" AnchorPane.rightAnchor="11.0" />
-                  <Button fx:id="extraerCor" disable="true" layoutX="638.0" layoutY="6.0" mnemonicParsing="false" onAction="#extraerDescriptor" text="Descriptores" AnchorPane.rightAnchor="101.0" />
-                  <Button fx:id="addImage" disable="true" layoutX="521.0" layoutY="6.0" mnemonicParsing="false" onAction="#anhadirImagen" text="Añadir imagenes" AnchorPane.rightAnchor="202.0" />
-                  <Button fx:id="subirBtn" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="7.0" layoutY="4.0" mnemonicParsing="false" onAction="#subir" styleClass="buttonBajar" AnchorPane.leftAnchor="4.0" />
-                  <Button fx:id="bajarBtn" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="31.0" layoutY="4.0" mnemonicParsing="false" onAction="#bajar" styleClass="buttonBajar" AnchorPane.leftAnchor="50.0" />
+                  <Button fx:id="compararBtn" disable="true" layoutX="720.0" layoutY="6.0" mnemonicParsing="false" onAction="#comparar" prefHeight="34.0" prefWidth="139.0" style="-fx-background-color: #2699ab; -fx-font-size: 12; -fx-text-fill: white;" text="Realizar Comparativa" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0" />
+                  <Button fx:id="subirBtn" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="7.0" layoutY="4.0" mnemonicParsing="false" onAction="#subir" styleClass="buttonBajar" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0" />
+                  <Button fx:id="bajarBtn" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="31.0" layoutY="4.0" mnemonicParsing="false" onAction="#bajar" styleClass="buttonBajar" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="4.0" />
                </children>
+               <opaqueInsets>
+                  <Insets bottom="4.0" />
+               </opaqueInsets>
             </AnchorPane>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: f5f5f5; -fx-border-width: 1 0 0 0; -fx-border-color: e6e6e6;" GridPane.columnSpan="2" GridPane.rowIndex="4">
+               <children>
+                  <ProgressBar fx:id="carga" layoutX="321.0" layoutY="1.0" prefWidth="200.0" visible="false" AnchorPane.leftAnchor="280.0" AnchorPane.rightAnchor="280.0" AnchorPane.topAnchor="2.0" />
+                  <Label fx:id="cargaLabel" layoutX="227.0" layoutY="2.0" text="Cargando...:" visible="false" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="2.0" />
+               </children></AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
                <children>
                   <Button fx:id="i1" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="14.0" layoutY="5.0" mnemonicParsing="false" onAction="#nuevoWorkspace" styleClass="buttonBajar" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="0.0" />

@@ -84,7 +84,7 @@ public class Comparador {
         for(int i = 0; i< entrada.size()-1; i++){
             //Muestra los pares para comprobar si funciona bien:
             System.out.println("Par índice/valor: " + comparativa[i].index +"/"+comparativa[i].value);
-            
+            entrada.get(comparativa[i].index).setDistanciaUltimaComparativa(comparativa[i].value);
             resultado.add(entrada.get(comparativa[i].index));
         }
         

@@ -40,6 +40,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.MultipleSelectionModel;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -87,10 +88,6 @@ public class HomeControlador implements Initializable{
     }
     
     @FXML 
-    private Button addImage;
-    @FXML
-    private Button extraerCor;
-    @FXML 
     private Button compararBtn;
     @FXML
     private Button subirBtn;
@@ -131,7 +128,28 @@ public class HomeControlador implements Initializable{
     private Menu wsMenu;
     @FXML
     private Pane barraHerramientas;
+    @FXML
+    private Label cargaLabel;
+    @FXML
+    private ProgressBar carga;
     /////////////MÉTODOS////////////////
+
+    public Label getCargaLabel() {
+        return cargaLabel;
+    }
+
+    public void setCargaLabel(Label cargaLabel) {
+        this.cargaLabel = cargaLabel;
+    }
+
+    public ProgressBar getCarga() {
+        return carga;
+    }
+
+    public void setCarga(ProgressBar carga) {
+        this.carga = carga;
+    }
+
     //Listeners
     
     
@@ -215,18 +233,18 @@ public class HomeControlador implements Initializable{
                 if(!selectedItem.getValue().equals("Workspaces")){
                     System.out.println("Cambiando de seleccion");
                     imagenSeleccionada = null;
-                    extraerCor.setDisable(true);
                     i7.setDisable(true);
                     descriptorItem.setDisable(true);
                     borrarItem2.setDisable(true);
                     i6.setDisable(true);
                     seleccion = modelo.obtenerWorkspace(selectedItem.getValue());
+                    carga.setVisible(false);
+                    cargaLabel.setVisible(false);
                     if(seleccion != null){
                         borrarItem.setDisable(false);
                         cerrarItem.setDisable(false);
                         i3.setDisable(false);
                         i4.setDisable(false);
-                        addImage.setDisable(false);
                         i5.setDisable(false);
                         compararBtn.setDisable(false);
                         wsMenu.setDisable(false);
@@ -420,13 +438,11 @@ public class HomeControlador implements Initializable{
                                         }
                                         System.out.println("Clickao en mi");
                                         if(imagenSeleccionada != null){
-                                            extraerCor.setDisable(false);
                                             i7.setDisable(false);
                                             descriptorItem.setDisable(false);
                                             borrarItem2.setDisable(false);
                                             i6.setDisable(false);
                                         }else{
-                                            extraerCor.setDisable(true);
                                             descriptorItem.setDisable(true);
                                             borrarItem2.setDisable(true);
                                             i6.setDisable(true);
@@ -468,13 +484,11 @@ public class HomeControlador implements Initializable{
                                 }
                                 System.out.println("Clickao en mi");
                                 if(imagenSeleccionada != null){
-                                    extraerCor.setDisable(false);
                                     descriptorItem.setDisable(false);
                                     borrarItem2.setDisable(false);
                                     i6.setDisable(false);
                                     i7.setDisable(false);
                                 }else{
-                                    extraerCor.setDisable(true);
                                     descriptorItem.setDisable(true);
                                     borrarItem2.setDisable(true);
                                     i6.setDisable(true);
@@ -496,9 +510,7 @@ public class HomeControlador implements Initializable{
                     
                 }else{
                     if(seleccion == null){
-                        addImage.setDisable(true);
                         compararBtn.setDisable(true);
-                        extraerCor.setDisable(true);
                         i7.setDisable(true);
                         descriptorItem.setDisable(true);
                         borrarItem2.setDisable(true);
@@ -517,13 +529,22 @@ public class HomeControlador implements Initializable{
         );
     }
  
-    
+    @FXML
+    public void test(ActionEvent event){
+        if(carga.isVisible()){
+            carga.setVisible(false);
+        }else{
+            carga.setVisible(true);
+        }
+    }
     @FXML
     public void abrirWorkspace(ActionEvent event){ //Meter alguna forma para reconocer que se trata de un workspace creado? Archivo de texto invisible o algo
         System.out.println("Abrir workspace");
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File file = directoryChooser.showDialog(stage);
         if(file != null){
+            carga.setVisible(true);
+            cargaLabel.setVisible(true);
             //Comprobar permisos antes de nada
             if(file.canWrite() && file.canRead()){
                 Workspace abierto = modelo.abrirWorkspace(file.getName(),file.getAbsolutePath());
@@ -539,6 +560,8 @@ public class HomeControlador implements Initializable{
                     abierto.setCarpeta(file);
                     abierto.detectarImagenes();
                     wsTree.getRoot().getChildren().add(new TreeItem(abierto.getNombre()));
+                    carga.setVisible(false);
+                    cargaLabel.setVisible(false);
                     //Si hay error de apertura en imagenes mostrarlo:
                     if(abierto.getImagenesErroneas() != null){
                         String mensajeError ="";
@@ -577,6 +600,8 @@ public class HomeControlador implements Initializable{
                 alert.showAndWait();
             }
         }
+        carga.setVisible(false);
+        cargaLabel.setVisible(false);
         
     }
     
@@ -661,6 +686,8 @@ public class HomeControlador implements Initializable{
                 List<File> list = fileChooser.showOpenMultipleDialog(stage);
 
                 if (list != null){
+                    carga.setVisible(true);
+                    cargaLabel.setVisible(true);
                     for (File file : list){
                         openFile(file, seleccion);
                     }
@@ -681,6 +708,8 @@ public class HomeControlador implements Initializable{
                             msm.select(temp2);
                         }
                     }
+                    carga.setVisible(false);
+                    cargaLabel.setVisible(false);
                     if(seleccion.getImagenesErroneas() != null){
                         System.out.println("Lanzando error de imagenes incorrectas en anhadirImagen()");
                         String mensajeError ="";
@@ -708,6 +737,8 @@ public class HomeControlador implements Initializable{
                         seleccion.setImagenesErroneas(null);
                     }
                 }
+                carga.setVisible(false);
+                cargaLabel.setVisible(false);
     }
     
     
@@ -765,13 +796,14 @@ public class HomeControlador implements Initializable{
             Stage stageLocal = new Stage();
             stageLocal.initModality(Modality.APPLICATION_MODAL);
             stageLocal.initOwner(stage);
-            stageLocal.setTitle("Modo de comparación");
+            stageLocal.setTitle("Selección de modo de comparación");
             stageLocal.setResizable(false); //Evitar que se pueda cambiar de tam
             //Setters para todos los atributos
             controller.setModelo(modelo);
             controller.setStage(stageLocal);
             controller.setStagePadre(stage);
             controller.setSel(seleccion);
+            controller.setControllerPadre(this);
             stageLocal.setScene(new Scene(root));
             stageLocal.show();
         
@@ -823,6 +855,7 @@ public class HomeControlador implements Initializable{
         controller.setModelo(modelo);
         controller.setStage(stageLocal);
         controller.setWsTree(wsTree);
+        controller.setControladorPadre(this);
         stageLocal.setScene(new Scene(root));
         stageLocal.show();
     }

@@ -32,6 +32,7 @@ public class ComparacionController implements Initializable {
     private Stage stage;
     private Stage stagePadre; //Necesario para transmitirle la paternidad de la ventana de resultados antes de cerrarse
     private Workspace sel;
+    private HomeControlador controllerPadre; //Para establecer la carga
     
     @FXML
     private ComboBox seleccion;
@@ -67,6 +68,14 @@ public class ComparacionController implements Initializable {
     public void setStagePadre(Stage stagePadre) {
         this.stagePadre = stagePadre;
     }
+
+    public HomeControlador getControllerPadre() {
+        return controllerPadre;
+    }
+
+    public void setControllerPadre(HomeControlador controllerPadre) {
+        this.controllerPadre = controllerPadre;
+    }
     
     
     
@@ -96,7 +105,11 @@ public class ComparacionController implements Initializable {
             );
             File referencia = fileChooser.showOpenDialog(stage);
             if(referencia != null){
+                this.controllerPadre.getCarga().setVisible(true);
+                this.controllerPadre.getCargaLabel().setVisible(true);
                 sel.compararCoocurrencia(referencia);
+                this.controllerPadre.getCarga().setVisible(false);
+                this.controllerPadre.getCargaLabel().setVisible(false);
                 //Ahora abrir ventana de resultados y llenarla
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/Resultado.fxml"));
                 //Parent root = (Parent)loader.load();
@@ -107,7 +120,7 @@ public class ComparacionController implements Initializable {
                 Stage stageLocal = new Stage();
                 stageLocal.initModality(Modality.APPLICATION_MODAL);
                 stageLocal.initOwner(this.stagePadre);
-                stageLocal.setTitle("Resultado de comparación");
+                stageLocal.setTitle("Resultado de comparación utilizando descriptores de " +seleccion.getValue().toString());
                 stageLocal.setResizable(false); //Evitar que se pueda cambiar de tam
                 //Setters para todos los atributos
                 //controller.setModelo(modelo);

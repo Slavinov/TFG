@@ -42,12 +42,21 @@ import javafx.stage.Stage;
 public class NuevoWorkspaceController implements Initializable {
     private FachadaModelo modelo;
     private Stage stage;
-    
+    private HomeControlador controladorPadre;
     
     @FXML
     private TextField nombre;
     
     private TreeView wsTree; 
+
+    public HomeControlador getControladorPadre() {
+        return controladorPadre;
+    }
+
+    public void setControladorPadre(HomeControlador controladorPadre) {
+        this.controladorPadre = controladorPadre;
+    }
+    
     
     public FachadaModelo getModelo() {
         return modelo;
@@ -111,9 +120,13 @@ public class NuevoWorkspaceController implements Initializable {
                     List<File> list = fileChooser.showOpenMultipleDialog(stage);
 
                     if (list != null){
+                        this.controladorPadre.getCarga().setVisible(true);
+                        this.controladorPadre.getCargaLabel().setVisible(true);
                         for (File file : list){
                             openFile(file, nuevoWorkspace);
                         }
+                        this.controladorPadre.getCarga().setVisible(false);
+                        this.controladorPadre.getCargaLabel().setVisible(false);
                         if(nuevoWorkspace.getImagenesErroneas() != null){
                         String mensajeError ="";
                         for(int i=0; i<nuevoWorkspace.getImagenesErroneas().size(); i++){
