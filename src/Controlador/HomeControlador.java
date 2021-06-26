@@ -63,14 +63,14 @@ import javafx.stage.Stage;
 import javax.annotation.Resources;
 
 /**
- * Controlador de la vista principal JavaFX
+ * Controlador de la vista principal. 
  * @author Stanislav
  */
 public class HomeControlador implements Initializable{
     private ArrayList<Workspace> workspaces = new ArrayList<Workspace>(); 
     private Stage stage;
-    private Desktop desktop = Desktop.getDesktop(); //isDesktopSupported() para comprobar en otros sistemas. Sirve para visualizar imagenes y tal. Mejor buscar visualizador de java o implementarlo en JavaFX.
-    private FachadaModelo modelo; //Singleton?
+    private Desktop desktop = Desktop.getDesktop(); //isDesktopSupported() para comprobar en otros sistemas. Sirve para visualizar imagenes entre otras cosas.
+    private FachadaModelo modelo; 
     private Workspace seleccion; //Workspace seleccionado actualmente
     private String imagenSeleccionada; //Nombre de la imagen seleccionada en el workspace
     private Label itemSeleccionado = null;
@@ -128,37 +128,17 @@ public class HomeControlador implements Initializable{
     private Menu wsMenu;
     @FXML
     private Pane barraHerramientas;
-    @FXML
-    private Label cargaLabel;
-    @FXML
-    private ProgressBar carga;
+
     /////////////MÉTODOS////////////////
 
-    public Label getCargaLabel() {
-        return cargaLabel;
-    }
-
-    public void setCargaLabel(Label cargaLabel) {
-        this.cargaLabel = cargaLabel;
-    }
-
-    public ProgressBar getCarga() {
-        return carga;
-    }
-
-    public void setCarga(ProgressBar carga) {
-        this.carga = carga;
-    }
-
-    //Listeners
-    
+    //Constructor especial, recibe el modelo desde la pantalla de carga
+    public HomeControlador(FachadaModelo m){
+        this.modelo = m;
+    } 
     
     //Init
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //Cargar datos del modelo
-        modelo = new FachadaModelo();
-        modelo.init();
         //Inicialización de interfaz
         ImageView img = new ImageView("iconos/arrow-up.png");
         img.setFitHeight(25);
@@ -223,7 +203,7 @@ public class HomeControlador implements Initializable{
         //Añadir listeners:
         wsTree.getSelectionModel().selectedItemProperty().addListener( 
         new ChangeListener() {
-
+            
             @Override
             public void changed(ObservableValue observable, Object oldValue,
                     Object newValue) {
@@ -238,8 +218,6 @@ public class HomeControlador implements Initializable{
                     borrarItem2.setDisable(true);
                     i6.setDisable(true);
                     seleccion = modelo.obtenerWorkspace(selectedItem.getValue());
-                    carga.setVisible(false);
-                    cargaLabel.setVisible(false);
                     if(seleccion != null){
                         borrarItem.setDisable(false);
                         cerrarItem.setDisable(false);
@@ -306,7 +284,6 @@ public class HomeControlador implements Initializable{
                                 borrarImagen(null);                                
                             }
                         });
-                        // Add MenuItem to ContextMenu
                         contextMenu.getItems().addAll(item1, item2, item3);
                         temp.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
  
@@ -316,13 +293,8 @@ public class HomeControlador implements Initializable{
                                 contextMenu.show(temp, event.getScreenX(), event.getScreenY());
                             }
                         });
-                        ////////////FIN DE MENÚ DE CONTEXTO/////////////////
-                        
-                        entrada.getChildren().add(temp);
-                        
-                        //entrada.getChildren().add(new ImageView(seleccion.getImagenes().get(i).getMiniatura()));
-                        //entrada.getChildren().add(new Label(seleccion.getImagenes().get(i).getNombre())); 
-                        
+                        ////////////FIN DE MENÚ DE CONTEXTO/////////////////                       
+                        entrada.getChildren().add(temp);                       
                         gp.add(entrada, nCol, nFila);
                         nCol++;
                     }
@@ -404,13 +376,8 @@ public class HomeControlador implements Initializable{
                                         contextMenu.show(temp, event.getScreenX(), event.getScreenY());
                                     }
                                 });
-                                ////////////FIN DE MENÚ DE CONTEXTO/////////////////
-                                
+                                ////////////FIN DE MENÚ DE CONTEXTO/////////////////                                
                                 entrada.getChildren().add(temp);
-
-                                //entrada.getChildren().add(new ImageView(seleccion.getImagenes().get(i).getMiniatura()));
-                                //entrada.getChildren().add(new Label(seleccion.getImagenes().get(i).getNombre())); 
-
                                 gp2.add(entrada, nCol2, nFila2);
                                 nCol2++;
                             }
@@ -509,7 +476,11 @@ public class HomeControlador implements Initializable{
                     }
                     
                 }else{
-                    if(seleccion == null){
+                    if(modelo.getWorkspaces().size() == 0){//Se cerraron todos los workspaces
+                        scrollPane.setContent(null); //Se elimina todo de la visualización
+                        seleccion = null;
+                    }
+                    if(seleccion == null){ //Se desactivan los botones que requieren seleccion activa
                         compararBtn.setDisable(true);
                         i7.setDisable(true);
                         descriptorItem.setDisable(true);
@@ -530,21 +501,11 @@ public class HomeControlador implements Initializable{
     }
  
     @FXML
-    public void test(ActionEvent event){
-        if(carga.isVisible()){
-            carga.setVisible(false);
-        }else{
-            carga.setVisible(true);
-        }
-    }
-    @FXML
     public void abrirWorkspace(ActionEvent event){ //Meter alguna forma para reconocer que se trata de un workspace creado? Archivo de texto invisible o algo
         System.out.println("Abrir workspace");
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File file = directoryChooser.showDialog(stage);
         if(file != null){
-            carga.setVisible(true);
-            cargaLabel.setVisible(true);
             //Comprobar permisos antes de nada
             if(file.canWrite() && file.canRead()){
                 Workspace abierto = modelo.abrirWorkspace(file.getName(),file.getAbsolutePath());
@@ -560,8 +521,6 @@ public class HomeControlador implements Initializable{
                     abierto.setCarpeta(file);
                     abierto.detectarImagenes();
                     wsTree.getRoot().getChildren().add(new TreeItem(abierto.getNombre()));
-                    carga.setVisible(false);
-                    cargaLabel.setVisible(false);
                     //Si hay error de apertura en imagenes mostrarlo:
                     if(abierto.getImagenesErroneas() != null){
                         String mensajeError ="";
@@ -600,8 +559,6 @@ public class HomeControlador implements Initializable{
                 alert.showAndWait();
             }
         }
-        carga.setVisible(false);
-        cargaLabel.setVisible(false);
         
     }
     
@@ -686,8 +643,6 @@ public class HomeControlador implements Initializable{
                 List<File> list = fileChooser.showOpenMultipleDialog(stage);
 
                 if (list != null){
-                    carga.setVisible(true);
-                    cargaLabel.setVisible(true);
                     for (File file : list){
                         openFile(file, seleccion);
                     }
@@ -708,8 +663,6 @@ public class HomeControlador implements Initializable{
                             msm.select(temp2);
                         }
                     }
-                    carga.setVisible(false);
-                    cargaLabel.setVisible(false);
                     if(seleccion.getImagenesErroneas() != null){
                         System.out.println("Lanzando error de imagenes incorrectas en anhadirImagen()");
                         String mensajeError ="";
@@ -737,19 +690,15 @@ public class HomeControlador implements Initializable{
                         seleccion.setImagenesErroneas(null);
                     }
                 }
-                carga.setVisible(false);
-                cargaLabel.setVisible(false);
     }
     
     
     //Función de soporte para cargar imágenes: copia la imagen en la carpeta del workspace y llama al método de procesado de imágenes del workspace
     private void openFile(File file, Workspace ws) {
         try {
-            //desktop.open(file); //Mostrar la imagen
             System.out.println(file.getName());
             File d = new File(ws.getPath()+"\\"+file.getName());
             Path destino = d.toPath();
-            //file.renameTo(new File(workspaces.get(workspaces.size()-1).getPath()+"\\"+workspaces.get(workspaces.size()-1).getNombre()+"\\"+file.getName())); //Se mueve imagen a la carpeta destino del workspace
             Files.copy(file.toPath(), destino , StandardCopyOption.REPLACE_EXISTING); //Se copia al destino
             //Se procesa en el ws
             ws.anhadirImagen(d);
@@ -872,15 +821,12 @@ public class HomeControlador implements Initializable{
         
         if(objetivo != null){
             System.out.println("Extraer descriptor de la imagen: " + imagenSeleccionada);
-            //seleccion.extraerDescriptorCoocurrencia(imagenSeleccionada);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/Extraccion.fxml"));
             Parent root = (Parent)loader.load();
             ExtraccionController controller = (ExtraccionController)loader.getController();
             Stage stageLocal = new Stage();
-            //stageLocal.initModality(Modality.APPLICATION_MODAL);
             stageLocal.initOwner(stage);
             stageLocal.setTitle("Descriptores de " + imagenSeleccionada);
-            //stageLocal.setResizable(false); //Evitar que se pueda cambiar de tam
             //Setters para todos los atributos
             controller.setModelo(modelo);
             controller.setImagen(objetivo);
@@ -895,8 +841,6 @@ public class HomeControlador implements Initializable{
     @FXML
     public void ajustes(ActionEvent event) throws IOException{     
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/Configuracion.fxml"));
-        //Parent root = (Parent)loader.load();
-        //ConfiguracionController controller = (ConfiguracionController)loader.getController();
         ConfiguracionController controller = new ConfiguracionController(modelo);
         loader.setController(controller);
         Parent root = (Parent)loader.load();
@@ -905,8 +849,6 @@ public class HomeControlador implements Initializable{
         stageLocal.initOwner(stage);
         stageLocal.setTitle("Ajustes");
         stageLocal.setResizable(false); //Evitar que se pueda cambiar de tam
-        //Setters para todos los atributos
-        //controller.setModelo(modelo);
         controller.setStage(stageLocal);
         stageLocal.setScene(new Scene(root));
         stageLocal.show();

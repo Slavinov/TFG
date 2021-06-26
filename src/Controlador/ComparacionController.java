@@ -105,11 +105,7 @@ public class ComparacionController implements Initializable {
             );
             File referencia = fileChooser.showOpenDialog(stage);
             if(referencia != null){
-                this.controllerPadre.getCarga().setVisible(true);
-                this.controllerPadre.getCargaLabel().setVisible(true);
                 sel.compararCoocurrencia(referencia);
-                this.controllerPadre.getCarga().setVisible(false);
-                this.controllerPadre.getCargaLabel().setVisible(false);
                 //Ahora abrir ventana de resultados y llenarla
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/Resultado.fxml"));
                 //Parent root = (Parent)loader.load();

@@ -46,8 +46,8 @@
             </SplitPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
                <children>
-                  <Button layoutX="14.0" layoutY="6.0" mnemonicParsing="false" onAction="#cerrar" text="Cerrar" AnchorPane.leftAnchor="13.0" />
-                  <Button fx:id="extraerBtn" disable="true" layoutX="534.0" layoutY="6.0" mnemonicParsing="false" onAction="#extraer" text="Extraer" AnchorPane.rightAnchor="13.0" />
+                  <Button layoutX="14.0" layoutY="6.0" mnemonicParsing="false" onAction="#cerrar" prefHeight="30.0" text="Cerrar" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="10.0" />
+                  <Button fx:id="extraerBtn" disable="true" layoutX="534.0" layoutY="6.0" mnemonicParsing="false" onAction="#extraer" prefHeight="30.0" style="-fx-text-fill: white; -fx-background-color: #2699ab;" text="Extraer" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="10.0" />
                </children>
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">

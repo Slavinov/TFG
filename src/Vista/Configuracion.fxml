@@ -52,14 +52,14 @@
             <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <children>
                   <Button layoutX="196.0" layoutY="4.0" mnemonicParsing="false" onAction="#modifyPath" text="Modificar" />
-                  <Button layoutX="131.0" layoutY="4.0" mnemonicParsing="false" onAction="#resetPath" text="Reset" />
+                  <Button layoutX="101.0" layoutY="4.0" mnemonicParsing="false" onAction="#resetPath" text="Restablecer" />
                </children>
             </Pane>
             <ComboBox fx:id="distancia" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
             <Label text="*Distancia:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="7">
                <children>
-                  <Button layoutX="314.0" layoutY="8.0" mnemonicParsing="false" onAction="#cerrar" text="Cerrar" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="14.0" />
+                  <Button layoutX="314.0" layoutY="8.0" mnemonicParsing="false" onAction="#cerrar" prefHeight="30.0" text="Cerrar" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="10.0" />
                </children>
             </AnchorPane>
             <Label text="*Estas opciones no afectan a los descriptores ya existentes. Surtirán efecto al realizar extracciones o comparaciones nuevas." wrapText="true" GridPane.columnSpan="3" GridPane.rowIndex="6">

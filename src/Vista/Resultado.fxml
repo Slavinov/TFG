@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="550.0" prefWidth="700.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="AnchorPane" prefHeight="560.0" prefWidth="700.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@resultado.css" />
     </stylesheets>
@@ -24,7 +24,7 @@
           <RowConstraints maxHeight="212.0" minHeight="0.0" prefHeight="150.0" vgrow="NEVER" />
             <RowConstraints maxHeight="212.0" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
           <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="310.0" vgrow="ALWAYS" />
-            <RowConstraints maxHeight="161.0" minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="161.0" minHeight="10.0" prefHeight="40.0" vgrow="NEVER" />
         </rowConstraints>
          <children>
             <ScrollPane fx:id="scrollPane" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="3">
@@ -34,7 +34,7 @@
             </ScrollPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
                <children>
-                  <Button layoutX="167.0" layoutY="3.0" mnemonicParsing="false" onAction="#cerrar" text="Cerrar" AnchorPane.rightAnchor="10.0" />
+                  <Button fx:id="desBtn" disable="true" layoutX="413.0" layoutY="8.0" mnemonicParsing="false" onAction="#cerrar" prefHeight="30.0" prefWidth="110.0" style="-fx-text-fill: white; -fx-background-color: #2699ab;" text="Ver Descriptores" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="10.0" />
                </children>
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
@@ -78,6 +78,11 @@
                   <Insets top="10.0" />
                </padding>
             </Separator>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
+               <children>
+                  <Button layoutX="22.0" layoutY="7.0" mnemonicParsing="false" onAction="#cerrar" prefHeight="30.0" prefWidth="61.0" text="Cerrar" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="10.0" />
+               </children>
+            </AnchorPane>
          </children>
       </GridPane>
    </children>

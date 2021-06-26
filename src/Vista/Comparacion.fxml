@@ -13,8 +13,8 @@
     </stylesheets>
    <children>
       <Label layoutX="33.0" layoutY="87.0" text="Tipo de descriptor:" AnchorPane.leftAnchor="33.0" />
-      <Button layoutX="14.0" layoutY="155.0" mnemonicParsing="false" onAction="#cerrar" text="Cerrar" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="14.0" />
-      <Button layoutX="344.0" layoutY="155.0" mnemonicParsing="false" onAction="#comparar" text="Comparar" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="14.0" />
+      <Button layoutX="14.0" layoutY="155.0" mnemonicParsing="false" onAction="#cerrar" prefHeight="30.0" text="Cerrar" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="10.0" />
+      <Button layoutX="344.0" layoutY="155.0" mnemonicParsing="false" onAction="#comparar" prefHeight="30.0" style="-fx-background-color: #2699ab; -fx-text-fill: white;" text="Comparar" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="10.0" />
       <ComboBox fx:id="seleccion" layoutX="139.0" layoutY="83.0" prefWidth="150.0" AnchorPane.leftAnchor="139.0" AnchorPane.rightAnchor="138.0" />
    </children>
 </AnchorPane>

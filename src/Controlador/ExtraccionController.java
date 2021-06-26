@@ -22,6 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -194,7 +195,9 @@ public class ExtraccionController implements Initializable {
             int col = 1;
             for(int i = 0; i < 5; i++){
                 for(int j = 0; j<6; j++){
-                    Label temp = new Label(Float.toString(res[i][j]));
+                    //Label temp = new Label(Float.toString(res[i][j]));
+                    TextField temp = new TextField(Float.toString(res[i][j]));
+                    temp.setEditable(false);
                     temp.setPadding(new Insets(2,2,2,2));
                     gp.add(temp, col, row);
                     col++;

@@ -1,47 +1,58 @@
 package Controlador;
 
-import DataAccess.FachadaDAO;
+import Modelo.FachadaModelo;
+import Vista.PantallaDeCarga;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.application.Preloader.StateChangeNotification;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.stage.Stage;
 
 /**
- * Entrada al programa, inicia la interfaz gráfica pasando el control a HomeControlador
+ * Entrada al programa, inicia la interfaz gráfica llamando a la pantalla de carga y a continuación crea un hilo para cargar los datos del modelo.
  * @author Stanislav
  */
 public class App extends Application{
-
+    FachadaModelo modelo = null;
+    PantallaDeCarga pc = new PantallaDeCarga();
     /**
      * @param args the command line arguments
      * @throws java.lang.Exception
      */
-    @Override
-    public void start(Stage primaryStage) throws Exception{
-        primaryStage.setTitle("Comparación de similaridad");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/HomeVista.fxml"));
-        //Parent root = FXMLLoader.load(getClass().getResource("/Vista/HomeVista.fxml"));
-        Parent root = (Parent)loader.load();
-        HomeControlador controller = (HomeControlador)loader.getController();
-        controller.setStage(primaryStage);
-        primaryStage.setScene(new Scene(root));
-        primaryStage.show();
+    
+    //Se carga el modelo en otro hilo
+    class ProcessService extends Service<Void> {
+        @Override
+        protected Task<Void> createTask() {
+            return new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    modelo = new FachadaModelo();
+                    modelo.init();
+                    return null;
+                }
+            };
+        }
     }
     
-    public static void main(String[] args) {
-        /////////BANCO DE PRUEBAS////////////
-            //FachadaDAO f = FachadaDAO.getFachada();
-            //f.initTest();
-            //f.insertTest(2322, "heheee");
-            //f.getNumTest();
-        /////////FIN BANCO DE PRUEBAS//////////
-        
-        
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+        primaryStage.setTitle("Cargando...");       
+        pc.start(primaryStage);
+        //Nuevo hilo para cargar el modelo, cuando termine iniciará el resto de la interfaz:
+        Service service = new ProcessService();
+        service.start();
+        service.setOnSucceeded(e -> { //Se terminó de cargar el modelo!
+            System.out.println("El hilo terminó con éxito!");
+            pc.setModelo(modelo);
+            pc.handleStateChangeNotification(new StateChangeNotification(StateChangeNotification.Type.BEFORE_START));
+        });
+
+    }
+    
+    public static void main(String[] args) {       
         System.out.println(System.getProperty("user.home")+"\\Workspaces"); //user.dir es el directorio del programa, puede ser interesante también
         launch(args);
-        ///////////////////FASE 1////////////////
-        //HomeControlador controlador = new HomeControlador();
     }
     
 }

@@ -6,19 +6,26 @@
 package Controlador;
 
 import Modelo.FachadaModelo;
+import Modelo.Imagen;
 import Modelo.Workspace;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -34,7 +41,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
+ * Pantalla de resultados de una comparativa dada
  *
  * @author Stanislav
  */
@@ -43,7 +50,7 @@ public class ResultadoController implements Initializable {
     private Stage stage;
     private Workspace sel;
     private Desktop desktop = Desktop.getDesktop();
-    private String imagenSeleccionada;
+    private String imagenSeleccionada = null;
     private Label itemSeleccionado = null;
     @FXML
     private ScrollPane scrollPane;
@@ -58,6 +65,8 @@ public class ResultadoController implements Initializable {
     private Label res2;
     @FXML
     private Label res3;
+    @FXML
+    private Button desBtn;
     //Constructor personalizado, ya que se requiere acceder a la selección antes de nada para poder iniciar la vista correctamente
     public ResultadoController(Workspace w){
         sel = w;
@@ -154,7 +163,7 @@ public class ResultadoController implements Initializable {
 
             Pane entrada = new Pane();
             entrada.setPadding(new Insets(15, 5, 15, 5));
-            Label temp = new Label(sel.getResultadoComparacion().get(i).getNombre() +" (d="+sel.getResultadoComparacion().get(i).getDistanciaUltimaComparativa()+")");
+            Label temp = new Label(sel.getResultadoComparacion().get(i).getNombre()); //+" (d="+sel.getResultadoComparacion().get(i).getDistanciaUltimaComparativa()+")");
             temp.setMaxWidth(120.0);
             temp.setMinWidth(120.0);
             temp.setWrapText(true);
@@ -174,15 +183,26 @@ public class ResultadoController implements Initializable {
                     abrirImagenActual();
                 }
             });
-            MenuItem item2 = new MenuItem("Abrir ubicación");
+            MenuItem item2 = new MenuItem("Ver descriptores");
             item2.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    System.out.println("NO IMPLEMENTADO, DEBE IR A OTRA VENTANA");
+                    try {
+                        extraerDescriptor(null);
+                    } catch (IOException ex) {
+                        Logger.getLogger(ResultadoController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+            MenuItem item3 = new MenuItem("Abrir ubicación");
+            item3.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    explorador();
                 }
             });
             // Add MenuItem to ContextMenu
-            contextMenu.getItems().addAll(item1, item2);
+            contextMenu.getItems().addAll(item1, item2,item3);
             temp.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
 
                 @Override
@@ -192,12 +212,7 @@ public class ResultadoController implements Initializable {
                 }
             });
             ////////////FIN DE MENÚ DE CONTEXTO/////////////////
-
-            entrada.getChildren().add(temp);
-
-            //entrada.getChildren().add(new ImageView(seleccion.getImagenes().get(i).getMiniatura()));
-            //entrada.getChildren().add(new Label(seleccion.getImagenes().get(i).getNombre())); 
-
+            entrada.getChildren().add(temp); 
             gp.add(entrada, nCol, nFila);
             nCol++;
         }
@@ -219,9 +234,11 @@ public class ResultadoController implements Initializable {
                         Label temp2 = (Label) temp.getChildren().get(0);
                         System.out.println(temp2.getText());
                         imagenSeleccionada = temp2.getText();
+                        System.out.println("imagen seleccionada: "+imagenSeleccionada);
 
                         //Selección del label con css
                         itemSeleccionado = temp2;
+                        desBtn.setDisable(false);
                         itemSeleccionado.setStyle("-fx-background-color: #2699ab;");
                     }
                     System.out.println("Clickao en mi");
@@ -238,6 +255,35 @@ public class ResultadoController implements Initializable {
         
     }    
     
+    @FXML
+    public void extraerDescriptor(ActionEvent event) throws IOException{ 
+        //Se obtiene referencia a la imagen:
+        Imagen objetivo = null;
+        for(int i = 0; i<sel.getImagenes().size(); i++){
+            if(sel.getImagenes().get(i).getNombre().equals(imagenSeleccionada)){
+                objetivo = sel.getImagenes().get(i);
+            }
+        }
+        
+        if(objetivo != null){
+            System.out.println("Extraer descriptor de la imagen: " + imagenSeleccionada);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/Extraccion.fxml"));
+            Parent root = (Parent)loader.load();
+            ExtraccionController controller = (ExtraccionController)loader.getController();
+            Stage stageLocal = new Stage();
+            stageLocal.initOwner(stage);
+            stageLocal.setTitle("Descriptores de " + imagenSeleccionada);
+            //Setters para todos los atributos
+            controller.setModelo(modelo);
+            controller.setImagen(objetivo);
+            controller.setStage(stageLocal);
+            controller.setSeleccion(sel);
+            stageLocal.setScene(new Scene(root));
+            stageLocal.show();
+        }
+        
+    }
+    
     private void abrirImagenActual(){
         System.out.println("Abriendo...");
         try {
@@ -248,6 +294,14 @@ public class ResultadoController implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText("La imagen no existe o no hay un visualizador de imágenes instalado en el sistema");
             alert.showAndWait();
+        }
+    }
+    
+    public void explorador(){
+        try {
+            Runtime.getRuntime().exec("explorer.exe /select," + sel.getPath() + "\\" + this.imagenSeleccionada);
+        } catch (IOException ex) {
+            Logger.getLogger(HomeControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
