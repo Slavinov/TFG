@@ -7,6 +7,7 @@ import javafx.application.Preloader.StateChangeNotification;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
+import javax.imageio.ImageIO;
 
 /**
  * Entrada al programa, inicia la interfaz gráfica llamando a la pantalla de carga y a continuación crea un hilo para cargar los datos del modelo.
@@ -52,6 +53,10 @@ public class App extends Application{
     
     public static void main(String[] args) {       
         System.out.println(System.getProperty("user.home")+"\\Workspaces"); //user.dir es el directorio del programa, puede ser interesante también
+        for (String format : ImageIO.getWriterFormatNames()) {
+            System.out.println("format = " + format);
+        }
+        
         launch(args);
     }
     

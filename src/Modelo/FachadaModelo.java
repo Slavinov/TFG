@@ -218,9 +218,6 @@ public class FachadaModelo {
         this.baseDatos.setConfig(c);   
     }
     
-    public void guardarWorkspace(){
-        //Guardar el workspace seleccionado en la BD
-    }
     
     public Workspace obtenerWorkspace(String nombre){
         Workspace resultado = null;

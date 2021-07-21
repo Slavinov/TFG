@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.net.*?>
 <?import java.util.*?>
@@ -7,8 +10,26 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ManualController">
+<AnchorPane id="AnchorPane" prefHeight="850.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controlador.ManualController">
     <stylesheets>
-        <URL value="@manual.css"/>
+        <URL value="@manual.css" />
     </stylesheets>
+   <children>
+      <Text layoutX="202.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Manual de ayuda ">
+         <font>
+            <Font name="SinsArialBold" size="24.0" />
+         </font>
+      </Text>
+      <Text layoutX="32.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="La herramienta permite realizar comparaciones de similitud sobre conjuntos de imágenes variadas, denominados &quot;Workspaces&quot;.  La gestión de dichos workspaces y el resto de funcionalidades se realiza mediante la ventana principal de la aplicación, que se muestra a continuación:" textAlignment="JUSTIFY" wrappingWidth="540.0" />
+      <Text layoutX="32.0" layoutY="450.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1. Árbol de workspaces: En esta zona de la ventana aparecerán los workspaces abiertos actualmente. Cada vez que se cree un nuevo workspace o se abra uno existente, se añadirá a esta lista, permitiendo la navegación entre ellos mediante pulsaciones del ratón o el uso de los iconos de flechas en la parte inferior del árbol." textAlignment="JUSTIFY" wrappingWidth="540.0" />
+      <Text layoutX="32.0" layoutY="524.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2. Contenido del workspace: En la zona central de la ventana aparecerá el contenido del workspace seleccionado actualmente en el árbol de workspaces. En dicha área estarán todas las imágenes del workspace, las cuales se pueden seleccionar con el click izquierdo del ratón. Al pulsar el click derecho sobre una imagen, aparecerá un menú de contexto que permite realizar ciertas acciones como abrir la imagen en formato completo, ver los descriptores de la misma, o eliminarla del workspace." textAlignment="JUSTIFY" wrappingWidth="540.0" />
+      <Text layoutX="32.0" layoutY="615.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3. Botón de comparación: Una vez seleccionado un workspace con varias imágenes, se puede utilizar el botón para iniciar una comparativa. En primer lugar se pedirá seleccionar una imagen de referencia desde el sistema de archivos, y a continuación después de procesar los descriptores se mostrará la pantalla de resultados." textAlignment="JUSTIFY" wrappingWidth="540.0" />
+      <Text layoutX="30.0" layoutY="687.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4. Funcionalidades: En la parte superior aparecen 3 grupos de iconos con funcionalidades varias. El primer grupo se compone de 4 iconos, que controlan la creación, apertura, cierre y borrado de los workspaces mostrados en el árbol de workspaces. El segundo grupo se compone de 3 iconos, que controlan la adición, y borrado de imágenes, y gestión de descriptores de las imágenes del workspace seleccionado actualmente. Finalmente el último icono permite abrir el menú de ajustes, que permite establecer el path por defecto para los workspaces creados y la distancia utilizada por la extracción de texturas." textAlignment="JUSTIFY" wrappingWidth="540.0" />
+      <Text layoutX="32.0" layoutY="806.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5. Menú de acciones: Incluye las funcionalidades del apartado anterior en forma textual, además de añadir la categoría de ayuda con este manual." textAlignment="JUSTIFY" wrappingWidth="540.0" />
+      <ImageView fitHeight="294.0" fitWidth="432.0" layoutX="84.0" layoutY="121.0" pickOnBounds="true">
+         <image>
+            <Image url="@../iconos/manual.png" />
+         </image>
+      </ImageView>
+   </children>
 </AnchorPane>

@@ -566,18 +566,32 @@ public class HomeControlador implements Initializable{
     public void cerrarWorkspace(ActionEvent event){ //Simplemente borrarlo de la base de datos y del tree
         System.out.println("Cerrar workspace");
         if(seleccion != null){
+            int temp = 0;
             TreeItem entrada = null;
             TreeItem entrada2 = null;
             for(int i= 0; i< wsTree.getRoot().getChildren().size(); i++){
                 entrada = (TreeItem) wsTree.getRoot().getChildren().get(i);
                 if(entrada.getValue().equals(seleccion.getNombre())){                    
                     entrada2 = entrada;
+                    temp = i;
                 }
             }
             if(entrada2 != null){
                 modelo.cerrarWorkspace(seleccion.getNombre());           
                 //Borrar la entrada del árbol
-                entrada.getParent().getChildren().remove(entrada); 
+                entrada.getParent().getChildren().remove(entrada);
+                if(wsTree.getRoot().getChildren().size() != 0){
+                    //Se selecciona el índice anterior
+                    wsTree.getSelectionModel().select(temp);
+                }else{
+                    //Se borra el contenido y se deselecciona
+                    System.out.println("WsTree vacío!");
+                    wsTree.getSelectionModel().select(temp);
+                    scrollPane.setContent(null);
+                }
+                
+                
+            
             }        
         }
     }
@@ -611,6 +625,7 @@ public class HomeControlador implements Initializable{
         Alert alert = new Alert(AlertType.CONFIRMATION, "Borrar " + seleccion.getNombre() + " permanentemente (se perderán todas las imágenes y descriptores del workspace)?", ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
         System.out.println("Borrar workspace");
+        int temp = 0;
         if((seleccion != null) && (alert.getResult() == ButtonType.YES)){
             TreeItem entrada = null;
             TreeItem entrada2 = null;
@@ -618,12 +633,22 @@ public class HomeControlador implements Initializable{
                 entrada = (TreeItem) wsTree.getRoot().getChildren().get(i);
                 if(entrada.getValue().equals(seleccion.getNombre())){                    
                     entrada2 = entrada;
+                    temp=i;
                 }
             }
             if(entrada2 != null){
                 modelo.borrarWorkspace(seleccion.getNombre());           
                 //Borrar la entrada del árbol
                 entrada.getParent().getChildren().remove(entrada); 
+                if(wsTree.getRoot().getChildren().size() != 0){
+                    //Se selecciona el índice anterior
+                    wsTree.getSelectionModel().select(temp);
+                }else{
+                    //Se borra el contenido y se deselecciona
+                    System.out.println("WsTree vacío!");
+                    wsTree.getSelectionModel().select(temp);
+                    scrollPane.setContent(null);
+                }
             }
         }
     }
@@ -738,7 +763,7 @@ public class HomeControlador implements Initializable{
     
     @FXML 
     public void comparar(ActionEvent event) throws IOException{
-        if(seleccion.getImagenes().size() > 2){
+        if(seleccion.getImagenes().size() >= 2){
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/Comparacion.fxml"));
             Parent root = (Parent)loader.load();
             ComparacionController controller = (ComparacionController)loader.getController();
@@ -808,6 +833,23 @@ public class HomeControlador implements Initializable{
         stageLocal.setScene(new Scene(root));
         stageLocal.show();
     }
+    
+    @FXML 
+    public void ayuda(ActionEvent event) throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/Manual.fxml"));
+        Parent root = (Parent)loader.load();
+        ManualController controller = (ManualController)loader.getController();
+        Stage stageLocal = new Stage();
+        stageLocal.initModality(Modality.APPLICATION_MODAL);
+        stageLocal.initOwner(stage);
+        stageLocal.setTitle("Ayuda");
+        stageLocal.setResizable(false); //Evitar que se pueda cambiar de tam
+        //Setters para todos los atributos
+        controller.setStage(stageLocal);
+        stageLocal.setScene(new Scene(root));
+        stageLocal.show();
+    }
+    
     
     @FXML
     public void extraerDescriptor(ActionEvent event) throws IOException{ 
