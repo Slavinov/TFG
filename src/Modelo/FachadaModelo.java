@@ -4,21 +4,17 @@ import DataAccess.FachadaDAO;
 import ValueObjects.ConfigVO;
 import ValueObjects.WorkspaceVO;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Stanislav
  */
 public class FachadaModelo {
-    private ArrayList<Workspace> workspaces;
+    private ArrayList<Workspace> workspaces; 
     private String path; //Path por defecto de los workspaces, establecido o no por el usuario
-    private FachadaDAO baseDatos;
-    private int distancia = 1;
+    private FachadaDAO baseDatos; //Acceso a Derby para guardar/cargar referencias
+    private int distancia = 1; //Distancia utilizada por las comparaciones
 
     public int getDistancia() {
         return distancia;
@@ -66,15 +62,15 @@ public class FachadaModelo {
         this.path = config.getDefaultPath();
         this.distancia = config.getDistancia();
         baseDatos.initWorkspace();
-        //Extraer config y Workspaces, meter los workspaces en el arraylist y establecer los atributos de config. En caso de fallo? dejar en blanco todo -> AÑADIR UN ACTIVITY INDICATOR O ALGO
+        //Extraer config y Workspaces, meter los workspaces en el arraylist y establecer los atributos de config. 
         ArrayList<WorkspaceVO> wk = baseDatos.recuperarWorkspaces();     
         
         for(int i=0; i<wk.size();i++){
-            //Antes de nada obtener la referencia a la carpeta obtenida, ya que sin ella no va nada, si no se puede conseguir se salta el workspace y ya
+            //Antes de nada obtener la referencia a la carpeta obtenida, ya que sin ella no va nada, si no se puede conseguir se salta el workspace
             File carpeta = new File(wk.get(i).getPath());
             if(carpeta != null && carpeta.isDirectory()){
                 System.out.println("Detectado workspace: " + carpeta.getName());
-                System.out.println("Nombre del workspace?: " + wk.get(i).getNombre());
+                System.out.println("Nombre del workspace: " + wk.get(i).getNombre());
                 Workspace nuevo = new Workspace(wk.get(i).getNombre(),wk.get(i).getPath());
                 nuevo.setDistanciaCoocurrencia(distancia);
                 nuevo.setCarpeta(carpeta);
@@ -83,15 +79,10 @@ public class FachadaModelo {
                 workspaces.get(i).detectarImagenes();
             }
         }
-        //Detección de cambios en el directorio (watching directory for changes) en todos los workspaces (meter un listener?).
     }
     
     public void close(){
-        //Guardar la configuración
-        
-        //Guardar los Workspaces en la base de datos
-        
-        //Cerrar la conexion a la base de datos
+        //Cierra la conexión a la base de datos
         baseDatos.close();
     }
     
@@ -118,11 +109,10 @@ public class FachadaModelo {
         }
         //Guardar su referencia en la BD
         this.baseDatos.insertarWorkspace(work);
-        //En caso de añadir imágenes, tratarlas aquí (extraer info, descriptores...)
         return resultado;
     }
     
-    //Elimina recursivamente los contenidos del directorio
+    //Elimina recursivamente los contenidos del directorio, función de apoyo para eliminar workspaces.
     private boolean deleteDirectory(File path) {
         if( path.exists() ) {
           File[] files = path.listFiles();
@@ -159,9 +149,7 @@ public class FachadaModelo {
         
     }
     
-    public Workspace abrirWorkspace(String nombre, String path){
-        //Escanear el contenido de la carpeta, tratando las imágenes encontradas, añadiendo su referencia a persistencia, añadir listener a la carpeta? -> Solo a la seleccionada?
-        
+    public Workspace abrirWorkspace(String nombre, String path){       
         //Añadir referencias a la BD
         Workspace resultado = null;
         
@@ -204,12 +192,7 @@ public class FachadaModelo {
         return existe;
     }
     
-    //Añade una imagen a un workspace dado
-    //public void anhadirImagen(String nombre, File imagen){
-    //    
-    //}
-    
-    //Métodos de guardado de estado
+    //Métodos de guardado / cargado de estado
     public void guardarConfig(){
         //Guardar la configuración en la BD
         ConfigVO c = new ConfigVO();

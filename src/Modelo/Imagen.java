@@ -23,7 +23,7 @@ public class Imagen {
     public Imagen(String n){
         nombre = n;
     }
-    //Almacenar todo (formato,tipo,rows,cols,data(valores de pixeles))? probablemente. Desde Cargador -> extraer valores de pixeles, utilizando diferentes métodos dependiendo del formato quizás 
+    
 
     public float getDistanciaUltimaComparativa() {
         return distanciaUltimaComparativa;

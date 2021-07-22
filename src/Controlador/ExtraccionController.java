@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Controlador;
 
 import Modelo.DescriptorCoocurrencia;
@@ -20,18 +15,15 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
+ * FXML Controller class del panel de visualización/extracción de descriptores.
  *
  * @author Stanislav
  */
@@ -145,11 +137,6 @@ public class ExtraccionController implements Initializable {
         }
         if(descriptor != null){
             extraerBtn.setText("Actualizar");
-            //TableView tableView = new TableView();
-            //TableColumn<DescriptorCoocurrencia, String> EnergyCol = new TableColumn<>("Energy");
-            //EnergyCol.setCellValueFactory(new PropertyValueFactory<>("energy"));
-            //tableView.getColumns().add(EnergyCol);
-            //tableView.getItems().add(descriptor);
             GridPane gp = new GridPane();
             gp.setGridLinesVisible(true);
             //Se introducen todos los datos del descriptor en la tabla

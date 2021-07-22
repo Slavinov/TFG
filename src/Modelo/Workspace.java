@@ -20,6 +20,7 @@ public class Workspace {
     private File carpeta; //Carpeta dodnde se encuentra el workspace
     private Image miniatura; //Miniatura que se muestra en la interfaz
     
+    //Clases con lógica necesaria para cargar imágenes, extraer descriptores y compararlos
     private Cargador cargador = new Cargador();
     private Extractor extrator = new Extractor();
     private Comparador comparador = new Comparador();
@@ -158,8 +159,8 @@ public class Workspace {
     //Carga la imagen extrayendo los datos a la clase Imagen y saca la miniatura
     public void anhadirImagen(File imagen){
         try {
-            //Comprobar que se trata efectivamente de una imagen -> ImageIO solamente funciona con BMP, GIF, JPG y PNG
-            ImageIO.read(imagen).toString(); //Produce excepción si no es una imagen, y no se añade sin más
+            //Comprobar que se trata efectivamente de una imagen 
+            ImageIO.read(imagen).toString(); //Produce excepción si no es una imagen o no está soportado el formato de la misma
             
             try{
                 Imagen objetivo = cargador.procesarImagen(imagen);
@@ -173,7 +174,7 @@ public class Workspace {
                 System.out.println(e.getMessage());
             }
         
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             if(this.imagenesErroneas == null){
                 this.imagenesErroneas = new ArrayList<String>();
             }
@@ -189,10 +190,6 @@ public class Workspace {
         }
     }
     
-    //Elimina la imagen indicada, junto a la miniatura y sus descriptores
-    public void eliminarImagen(String nombre){
-        
-    }
     
     public void detectarImagenes(){
         //Busca las imagenes en la carpeta, las procesa y añade a este workspace.
@@ -200,8 +197,7 @@ public class Workspace {
         //Se itera la carpeta del workspace ignorando las subcarpetas:
         for(File fileEntry : carpeta.listFiles()){
             if(!fileEntry.isDirectory()){
-                anhadirImagen(fileEntry);
-                
+                anhadirImagen(fileEntry);                
             }
         }
     }
@@ -209,7 +205,7 @@ public class Workspace {
     
     //Obtiene el descriptor de coocurrencia de la imagen dada y lo guarda en un archivo de texto en la carpeta requerida
     //Fase 1, extraerlo sin más
-    //Fase 2, guardarlos en un archivo de texto y luego recuperarlo si existe?
+    //Fase 2, guardarlos en un archivo de texto y luego recuperarlo si existe
     public void extraerDescriptorCoocurrencia(String nombre){
         //Se obtiene la imagen a través del nombre:
         Imagen objetivo = null;
@@ -221,7 +217,7 @@ public class Workspace {
         
         if(objetivo != null){
             //Crea la carpeta de Coocurrencia si no existe:
-            new File(carpeta.getAbsolutePath()+"\\"+"Coocurrencia").mkdir(); //NULL POINTER al extraer descriptor de un ws recién creado
+            new File(carpeta.getAbsolutePath()+"\\"+"Coocurrencia").mkdir(); 
             //Obtiene la referencia
             File carpetaDescriptor = new File(carpeta.getAbsolutePath()+"\\"+"Coocurrencia");
             //Asociar internamente de alguna forma los descriptores a las imagenes
@@ -242,7 +238,7 @@ public class Workspace {
         }
     }
     
-    public void compararCoocurrencia(File referencia){
+    public int compararCoocurrencia(File referencia){
         //Comprueba que existen todos los descriptores, en caso contrario los crea, luego realiza la extracción de la imagen de referencia, y al final realiza la comparación
         boolean existe = false;
         this.referencia = null;
@@ -264,7 +260,6 @@ public class Workspace {
         }
         
         //En este punto están creados todos los descriptores bases, toca sacar el descriptor referencia
-        //DescriptorCoocurrencia ref = new DescriptorCoocurrencia();
         //Se añade la imagen de referencia al final de la lista de imagenes para reutilizar la función de extracción normal, y se trabajará con ella desde esa posición.
         int tamAntiguo = this.imagenes.size(); //Para comprobar que efectivamente se inserta la imagen y no realizar la comparación en caso contrario
         this.anhadirImagen(referencia);
@@ -278,6 +273,12 @@ public class Workspace {
         } 
         
         System.out.println("Imagen más similar a la referencia: " + resultadoComparacion.get(0).getNombre());
+        if(resultadoComparacion.size() == this.imagenes.size()){
+            System.out.println("Se realizó la comparativa con éxito!");
+            return 1;
+        }else{
+            return resultadoComparacion.size();
+        }
         
     }
     
@@ -314,14 +315,6 @@ public class Workspace {
         }
     }
     
-    public void compararLaws(File referencia){
-        
-    }
-    //Guardar todos los workspaces creados? -> Comprobar por ejemplo al iniciar si existen y borrar las referencias de los que ya no existen y tal.
-    //Detección de cambios en el directorio (watching directory for changes)
-    //Debería haber algún tipo de seguimiento de los objetos guardados aquí?, ya que el usuario podría cambiar el nombre de los archivos o algo
-    //Añadir elementos
-    //Borrar elemento
     
     
 }

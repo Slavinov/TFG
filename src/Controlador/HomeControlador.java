@@ -3,7 +3,6 @@ package Controlador;
 import Modelo.FachadaModelo;
 import Modelo.Imagen;
 import Modelo.Workspace;
-import ValueObjects.ConfigVO;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
@@ -16,8 +15,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -40,7 +37,6 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.MultipleSelectionModel;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -60,10 +56,9 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javax.annotation.Resources;
 
 /**
- * Controlador de la vista principal. 
+ * Controlador de la vista principal. Controla todas las funcionalidades principales e introduce la visualización de workspaces. 
  * @author Stanislav
  */
 public class HomeControlador implements Initializable{
@@ -193,6 +188,7 @@ public class HomeControlador implements Initializable{
         
         //Actualizar la vista con los workspaces cargados
         TreeItem rootItem = new TreeItem("Workspaces");
+        rootItem.setExpanded(true);
         for(int i = 0; i < modelo.getWorkspaces().size(); i++){
             rootItem.getChildren().add(new TreeItem(modelo.getWorkspaces().get(i).getNombre()));
         }

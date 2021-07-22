@@ -6,8 +6,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Singleton que centraliza la interacción con la BD Derby. Inicia la conexion a la BD, la crea si hace falta, y sirve de intermediario con los DAOs.
@@ -24,7 +22,6 @@ public class FachadaDAO {
     //BD
     String dbName = "derbyBD";
     Connection conexion;
-    TestDAO test;
     ConfigDAO configDAO;
     WorkspaceDAO workspaceDAO;
     
@@ -32,7 +29,6 @@ public class FachadaDAO {
         //Se crea la conexion
         try{
             conexion = DriverManager.getConnection(protocol+dbName+";create=true", null); //Con create=true se crea si no existe por primera vez
-            test = new TestDAO(conexion);
             configDAO = new ConfigDAO(conexion);
             workspaceDAO = new WorkspaceDAO(conexion);
         }catch(SQLException se){  
@@ -43,17 +39,6 @@ public class FachadaDAO {
     //Getter del Singleton
     public static FachadaDAO getFachada(){
         return fachada;
-    }
-    
-    //Métodos DAO:
-    public void initTest(){
-        this.test.initTest();
-    }
-    public int getNumTest(){
-        return this.test.getNumTest();
-    }
-    public void insertTest(int n, String v){
-        this.test.insertTest(n, v);
     }
     
     //Config

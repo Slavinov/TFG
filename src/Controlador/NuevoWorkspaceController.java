@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Controlador;
 
 import Modelo.FachadaModelo;
@@ -35,7 +30,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
+ * FXML Controller class para la ventana de darle nombre a un nuevo workspace.
  *
  * @author Stanislav
  */

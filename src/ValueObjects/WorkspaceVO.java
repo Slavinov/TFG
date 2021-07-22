@@ -1,7 +1,5 @@
 package ValueObjects;
 
-import Modelo.Imagen;
-import java.util.ArrayList;
 
 /**
  * Objeto de encapsulación para los datos de un Workspace específico

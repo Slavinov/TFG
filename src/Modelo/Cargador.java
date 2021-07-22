@@ -71,39 +71,6 @@ public class Cargador {
                 pix2[i][j] = 255;
             }
         }
-        /* 
-        BufferedImage result = new BufferedImage(
-        img.getWidth(),
-        img.getHeight(),
-        BufferedImage.TYPE_BYTE_GRAY);
-
-        for(int i= 0; i<height;i++){
-            for(int j=0; j<width;j++){
-                //Integer a = new Integer(pix[i][j]);
-                int gway = (pix[i][j] << 16) + (pix[i][j] << 8) + pix[i][j];
-                if(i==0 && j==0){
-                    System.out.println("Pix color: "+pix[i][j]);
-                    System.out.println("Gway color: "+gway);
-                    System.out.println("Gg: "+img.getRGB(j, i));
-                }
-                if(i==0 && j==3){
-                    System.out.println("Pix color: "+pix[i][j]);
-                    System.out.println("Gway color: "+gway);
-                    System.out.println("Gg: "+img.getRGB(j, i));
-                }
-                result.setRGB(j, i, gway);
-
-            }
-        }
-        
-        File f = new File("test.jpg");
-        try {
-            ImageIO.write(result, "jpg", f);
-        } catch (IOException ex) {
-            System.out.println("Error o algo");
-            Logger.getLogger(Cargador.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        */
         
         //Asignación de valores
         resultado.setAltura(height);
@@ -113,7 +80,7 @@ public class Cargador {
         return resultado;
     }
     
-    //Función para generar miniaturas 50x50 a partir de las imagenes
+    //Función para generar miniaturas 100x100 a partir de las imagenes
     public Image generarMiniatura(File entrada){
         BufferedImage resultado = null;
         
@@ -129,7 +96,7 @@ public class Cargador {
         return resultado2;
     }
     
-    
+    //Función de apoyo para cambiar entre formatos de la miniatura para hacela compatible con JavaFX.
     private BufferedImage toBufferedImage(java.awt.Image img)
     {
     if (img instanceof BufferedImage)
@@ -139,7 +106,7 @@ public class Cargador {
 
     // Create a buffered image with transparency
     BufferedImage bimage;
-        bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+    bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 
     // Draw the image on to the buffered image
     Graphics2D bGr = bimage.createGraphics();
