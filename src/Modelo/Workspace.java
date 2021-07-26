@@ -20,10 +20,13 @@ public class Workspace {
     private File carpeta; //Carpeta dodnde se encuentra el workspace
     private Image miniatura; //Miniatura que se muestra en la interfaz
     
-    //Clases con lógica necesaria para cargar imágenes, extraer descriptores y compararlos
-    private Cargador cargador = new Cargador();
-    private Extractor extrator = new Extractor();
-    private Comparador comparador = new Comparador();
+    /*
+        A continuación Clases con lógica necesaria para cargar imágenes, extraer descriptores y compararlos, por ahora solo descriptores de co-ocurrencia. 
+        Para añadir más implementaciones sería adecuado crear las clases correspondientes que implementen ICargador, IExtractor y IComparador y hacer un método que cambie entre implementaciones o crearlas antes de usarlos.  
+    */
+    private ICargador cargador = new Cargador();  //En el futuro renombrar las tres clases (p. ej CargadorCoocurrencia...). 
+    private IExtractor extrator = new Extractor();
+    private IComparador comparador = new Comparador();
     
     //Atributos puramente para facilitar la representación gráfica de los mismos (resultado de la última comparativa y la imagen de referencia usada en esa misma comparación)
     private ArrayList<Imagen> resultadoComparacion; //resultado ordenado de la última comparativa, reemplazar el array normal con este en la representación
@@ -111,7 +114,7 @@ public class Workspace {
         this.miniatura = miniatura;
     }
 
-    public Cargador getCargador() {
+    public ICargador getCargador() {
         return cargador;
     }
 
@@ -119,7 +122,7 @@ public class Workspace {
         this.cargador = cargador;
     }
 
-    public Extractor getExtrator() {
+    public IExtractor getExtrator() {
         return extrator;
     }
 
@@ -135,7 +138,7 @@ public class Workspace {
         this.resultadoComparacion = resultadoComparacion;
     }
 
-    public Comparador getComparador() {
+    public IComparador getComparador() {
         return comparador;
     }
 
@@ -221,7 +224,7 @@ public class Workspace {
             //Obtiene la referencia
             File carpetaDescriptor = new File(carpeta.getAbsolutePath()+"\\"+"Coocurrencia");
             //Asociar internamente de alguna forma los descriptores a las imagenes
-            DescriptorCoocurrencia descriptor = this.extrator.devolverCoocurrencia(objetivo,this.distanciaCoocurrencia);
+            DescriptorCoocurrencia descriptor = (DescriptorCoocurrencia) this.extrator.devolver(objetivo,this.distanciaCoocurrencia);
             descriptor.setCarpetaDescriptor(carpetaDescriptor);
             
             //En primer lugar se comprueba que no exista un descriptor de ese mimso tipo, si existe se reemplaza para evitar generar descriptores infinitos:
@@ -234,7 +237,7 @@ public class Workspace {
             objetivo.getDescriptores().add(descriptor); //Introduce el descriptor dentro del objeto imagen
             
             //Escribir el descriptor en un archivo de texto
-            this.extrator.guardarDescriptorCoocurrencia(descriptor);
+            this.extrator.guardarDescriptor(descriptor);
         }
     }
     
@@ -268,7 +271,7 @@ public class Workspace {
             
             this.extraerDescriptorCoocurrencia(this.referencia.getNombre());
             
-            this.resultadoComparacion = comparador.compararCoocurrencia(this.imagenes); //COMPARACIÓN EN SÍ
+            this.resultadoComparacion = comparador.comparar(this.imagenes); //COMPARACIÓN EN SÍ
             this.imagenes.remove(this.imagenes.size()-1); //Se elimina la imagen de referenca de las imagenes para evitar que se use para comparar a otros
         } 
         

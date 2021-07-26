@@ -16,11 +16,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Clase puente con los métodos principales de extracción de descriptores a partir de una imagen, añadir herencia quizas¿?
+ * Clase puente con los métodos principales implementados de extracción de descriptores de textura utilizando glcm a partir de una imagen
  * @author Stanislav
  */
-public class Extractor {
-    public DescriptorCoocurrencia devolverCoocurrencia(Imagen i, int distancia){
+public class Extractor implements IExtractor{
+    @Override
+    public Descriptor devolver(Imagen i, int distancia){
         DescriptorCoocurrencia resultado = new DescriptorCoocurrencia();
         resultado.setDistancia(distancia);
         InterfazCVIPTools lib = InterfazCVIPTools.INSTANCE;
@@ -75,12 +76,12 @@ public class Extractor {
         return resultado;
     }
     
-    //Otros descriptores
     
     //Guardado de descriptores en archivos de texto:
     
     //Coocurrencia
-    public void guardarDescriptorCoocurrencia(DescriptorCoocurrencia entrada){
+    public void guardarDescriptor(Descriptor e){
+        DescriptorCoocurrencia entrada = (DescriptorCoocurrencia) e;
         File file = new File(entrada.getCarpetaDescriptor().getAbsolutePath()+"\\"+entrada.getNombreImagen()+".txt");             
         FileWriter f;
         
@@ -114,8 +115,8 @@ public class Extractor {
                 f.write(Float.toString(entrada.getEntropy()[i])+"\n");
             }
             f.close();
-        }catch(IOException e){
-            e.printStackTrace();
+        }catch(IOException ex){
+            ex.printStackTrace();
         }
     }
     
@@ -203,6 +204,6 @@ public class Extractor {
             }
         }
         
-        //Otros descriptores...
+        
     }
 }

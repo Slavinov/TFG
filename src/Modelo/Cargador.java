@@ -15,9 +15,10 @@ import javax.imageio.ImageIO;
  * Clase auxiliar con la lógica para realizar la carga de imágenes 
  * @author Stanislav
  */
-public class Cargador {
+public class Cargador implements ICargador{
     //Hacer algún tipo de estructura o patrón de diseño, acomodando la carga de todos los tipos de archivos de entrada posibles (jpg, png, bnp....)
      
+    @Override
     public Imagen procesarImagen(File entrada){ //Diferenciar entre escala de gris y no escala de gris?
         Imagen resultado = null;
         resultado = new Imagen(entrada.getName());
@@ -81,6 +82,7 @@ public class Cargador {
     }
     
     //Función para generar miniaturas 100x100 a partir de las imagenes
+    @Override
     public Image generarMiniatura(File entrada){
         BufferedImage resultado = null;
         

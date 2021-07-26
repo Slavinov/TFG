@@ -9,7 +9,7 @@ import java.util.Arrays;
  */
 
 //Toma como entrada un arraylist de imágenes, con la imágen de referencia en la última posición del array. Lo devuelve ordenado según la similaridad a esa imagen de referencia, eliminándola.
-public class Comparador {
+public class Comparador implements IComparador{
     public class Pair implements Comparable<Pair> {
         public final int index;
         public final float value;
@@ -26,7 +26,8 @@ public class Comparador {
         }
     }
     
-    public ArrayList<Imagen> compararCoocurrencia(ArrayList<Imagen> entrada){
+    @Override
+    public ArrayList<Imagen> comparar(ArrayList<Imagen> entrada){
         ArrayList<Imagen> resultado = new ArrayList<Imagen>();
         DescriptorCoocurrencia temp;
         
